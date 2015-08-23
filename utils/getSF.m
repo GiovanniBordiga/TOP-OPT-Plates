@@ -27,7 +27,7 @@ switch element
                  -dims.width/2  dims.height/2]; % nodes coordinates
         A = zeros(n*ndof); % Aa=w
         for i = 1:n
-            A(ndof*(i-1)+1:nndofgdl*i,:) = subs([P'; Px'; Py'; Pxy'], {x,y}, {coord(i,1), coord(i,2)});
+            A(ndof*(i-1)+1:ndof*i,:) = subs([P'; Px'; Py'; Pxy'], {x,y}, {coord(i,1), coord(i,2)});
         end
         N=(P'*A^-1); % Nw=P'(A^-1)w
     % Mindlin
