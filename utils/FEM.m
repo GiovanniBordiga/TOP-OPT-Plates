@@ -1,7 +1,6 @@
 function U = FEM(nelx, nely, element, dims, material, x)
 ndof = 3; % TODO to get from element?
 n = 4;    % TODO to get from element?
-K = sparse(ndof*(nelx+1)*(nely+1), ndof*(nelx+1)*(nely+1));
 F = sparse(ndof*(nely+1)*(nelx+1), 1);  
 U = zeros(ndof*(nely+1)*(nelx+1), 1);
 
