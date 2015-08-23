@@ -1,31 +1,51 @@
 function U = FEM(nelx, nely, element, dims, material, x)
-ngdl = 3; % TODO to get from element?
+ndof = 3; % TODO to get from element?
 n = 4;    % TODO to get from element?
-K = sparse(ngdl*(nelx+1)*(nely+1), ngdl*(nelx+1)*(nely+1));
-F = sparse(ngdl*(nely+1)*(nelx+1), 1);  
-U = zeros(ngdl*(nely+1)*(nelx+1), 1);
+K = sparse(ndof*(nelx+1)*(nely+1), ndof*(nelx+1)*(nely+1));
+F = sparse(ndof*(nely+1)*(nelx+1), 1);  
+U = zeros(ndof*(nely+1)*(nelx+1), 1);
 
 [Kf, Ks] = getK(element, dims, material);
 % assemble K assuming the same size for all the elements
-% TODO better to optimize using sparse!
+% probably not so efficient (TEST!)
+% for elx = 1:nelx
+%     for ely = 1:nely
+%         nodesnum = [(elx-1)*(nely+1) + ely + 1
+%                     (elx)*(nely+1) + ely + 1
+%                     (elx)*(nely+1) + ely
+%                     (elx-1)*(nely+1) + ely];
+%         % create global dof index for the element
+%         dofindex = [];
+%         for i = 1:n
+%             dofindex = union(dofindex, nodesnum(i):nodesnum(i)+ndof-1);
+%         end
+%         K(dofindex, dofindex)= K(dofindex, dofindex) + x(ely, elx)*(Kf + Ks); 
+%     end
+% end
+
+% create global dof index
+DOFindex = [];
 for elx = 1:nelx
     for ely = 1:nely
         nodesnum = [(elx-1)*(nely+1) + ely + 1
                     (elx)*(nely+1) + ely + 1
                     (elx)*(nely+1) + ely
                     (elx-1)*(nely+1) + ely];
-        % create global dof index
         for i = 1:n
-            index = union(index, nodesnum(i):nodesnum(i)+ngdl);
+            DOFindex = union(DOFindex, nodesnum(i):nodesnum(i)+ndof-1);
         end
-        K(index, index)= K(index, index) + x(ely, elx)*(Kf + Ks); 
     end
 end
+% assemble K assuming the same size for all the elements
+x = reshape(x', 1, nelx*nely);
+rowindex = kron(DOFindex, ones(1, ndof*n));
+colindex = reshape(kron(reshape(DOFindex, ndof*n, nelx*nely), ones(1, ndof*n)), 1, nelx*nely*(ndof*n)^2);
+K = sparse(rowindex, colindex, kron(x, reshape(Kf+Ks, 1, (ndof*n)^2)));
 
 % define loads and constraints - MODIFY AS YOU LIKE
 F(1:3:3*(nely+1)*(nelx+1),1) = 1;
-alldof = 1:ngdl*(nelx+1)*(nely+1);
-fixeddof = 1:ngdl*(nely+1); % one edge clamped
+alldof = 1:ndof*(nelx+1)*(nely+1);
+fixeddof = 1:ndof*(nely+1); % one edge clamped
 freedof = setdiff(alldof, fixeddof);
 U(fixeddof) = 0;
 
