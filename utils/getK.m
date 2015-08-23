@@ -1,5 +1,5 @@
-function [Kf, Ks] = getK(element, dims, E, v)
-syms x y z;
+function [Kf, Ks] = getK(element, dims, material)
+syms x y z; E = material.E; v = material.v;
 N = getSF(element,dims);
 Cf = E/(1-v^2)*[1 v 0
                 v 1 0
