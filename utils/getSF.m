@@ -15,7 +15,7 @@ switch element
         for i = 1:n
             A(ngdl*(i-1)+1:ngdl*i,:) = subs([P'; Px'; Py'], {x,y}, {coord(i,1), coord(i,2)});
         end
-        N=(P'*A^-1)'; % N'w=P'(A^-1)w
+        N=(P'*A^-1); % Nw=P'(A^-1)w
     case 'BMF'
         n = 4;
         ngdl = 4;
@@ -29,7 +29,7 @@ switch element
         for i = 1:n
             A(ngdl*(i-1)+1:ngdl*i,:) = subs([P'; Px'; Py'; Pxy'], {x,y}, {coord(i,1), coord(i,2)});
         end
-        N=(P'*A^-1)'; % N'w=P'(A^-1)w
+        N=(P'*A^-1); % Nw=P'(A^-1)w
     % Mindlin
     case 'MB4'          % Mindlin bilinear 4 nodes
         n = 4;
@@ -43,8 +43,7 @@ switch element
         for i = 1:n
             A(i,:) = subs(P, {x,y}, {coord(i,1), coord(i,2)})';
         end
-        psi=(P'*A^-1)'; % N'w=P'(A^-1)w
-       % N = zeros(ngdl, ngdl*n);
+        psi=(P'*A^-1); % Nw=P'(A^-1)w
         for i = 1:n
             N(:, ngdl*(i-1)+1:ngdl*i) = eye(ngdl)*psi(i);
         end

@@ -9,9 +9,9 @@ Cs = 5/6*E/(2*(1+v))*[1 0
 switch element
     % Kirchhoff
     case {'ACM', 'BMF'}
-        Bf = [-diff(diff(N,x),x)'
-             -diff(diff(N,y),y)'
-             -2*diff(diff(N,x),y)']; % strain-displacement matrix
+        Bf = [-diff(diff(N,x),x)
+             -diff(diff(N,y),y)
+             -2*diff(diff(N,x),y)]; % strain-displacement matrix
         Kf = double(int(int(Bf'*Cf*Bf,y,-dims.height/2,dims.height/2),x,-dims.width/2,dims.width/2));
         Ks = 0;
     % Mindlin
