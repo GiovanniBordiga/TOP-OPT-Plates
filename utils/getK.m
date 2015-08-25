@@ -1,4 +1,14 @@
 function [Kf, Ks] = getK(element, dims, material)
+
+% 'element' is a string representing the finite element type.
+% 'dims' is a struct cointaining three attributes which specify the element's dimensions: width, height, thickness.
+% 'material' is a struct containing two attribute: E (Young's modulus) and v (Poisson's ratio).
+% 'Kf' is the matrix of the flexural elastic energy.
+% 'Ks' is the matrix of the shear elastic energy (zero for Kirchhoff elements).
+
+% the order of the element's dof are like: [node_1_dof_1 ... node_1_dof_k ...... node_n_dof_1 ... node_n_dof_k],
+% where n is the number of nodes and k is the number of dofs per node.
+
 syms x y z; E = material.E; v = material.v;
 N = getSF(element,dims);
 Cf = E/(1-v^2)*[1 v 0
