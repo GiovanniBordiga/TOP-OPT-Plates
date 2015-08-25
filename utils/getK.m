@@ -1,7 +1,7 @@
 function [Kf, Ks] = getK(element, dims, material)
 
 % 'element' is a string representing the finite element type.
-% 'dims' is a struct cointaining three attributes which specify the element's dimensions: width, height, thickness.
+% 'dims' is a struct containing three attributes which specify the element's dimensions: width, height, thickness.
 % 'material' is a struct containing two attribute: E (Young's modulus) and v (Poisson's ratio).
 % 'Kf' is the matrix of the flexural elastic energy.
 % 'Ks' is the matrix of the shear elastic energy (zero for Kirchhoff elements).
