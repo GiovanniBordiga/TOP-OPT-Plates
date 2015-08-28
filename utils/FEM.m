@@ -29,9 +29,9 @@ for elx = 1:nelx
         nodesnum = [(elx-1)*(nely+1) + ely + 1
                     (elx)*(nely+1) + ely + 1
                     (elx)*(nely+1) + ely
-                    (elx-1)*(nely+1) + ely];
+                    (elx-1)*(nely+1) + ely];    % global nodes numbers of the current element
         for i = 1:n
-            DOFindex = cat(2, DOFindex, nodesnum(i):nodesnum(i)+ndof-1);
+            DOFindex = cat(2, DOFindex, (nodesnum(i)-1)*ndof+1:nodesnum(i)*ndof);
         end
     end
 end
