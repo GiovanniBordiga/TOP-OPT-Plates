@@ -1,8 +1,10 @@
 function N = getSF(element, dims)
 
 % 'element' is a string representing the finite element type.
-% 'dims' is a struct containing three attributes which specify the element's dimensions: width, height, thickness.
-% 'N' is stored as a matrix MxN where M is the number of fields modeled and N is the number of dofs per element.
+% 'dims' is a struct containing three attributes which specify the
+% element's dimensions: width, height, thickness.
+% 'N' is stored as a matrix m-by-n where n is the number of fields modeled 
+% and n is the number of dofs per element.
 
 % the order of the element's dof are like: [node_1_dof_1 ... node_1_dof_k ...... node_n_dof_1 ... node_n_dof_k],
 % where n is the number of nodes and k is the number of dofs per node.

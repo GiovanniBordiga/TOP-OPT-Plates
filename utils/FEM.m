@@ -1,4 +1,17 @@
 function U = FEM(nelx, nely, element, dims, material, x)
+
+% 'nelx' and 'nely' are the number of element along the two dimensions.
+% 'element' is a string representing the finite element type.
+% 'dims' is a struct containing three attributes which specify the
+% element's dimensions: width, height, thickness.
+% 'material' is a struct containing two attribute: E (Young's modulus) and
+% v (Poisson's ratio).
+% 'x' is a nelx-by-nely matrix representing the density field on the plate.
+% 'U' is the global dofs vector.
+
+% the order of the element's dof are like: [node_1_dof_1 ... node_1_dof_k ...... node_n_dof_1 ... node_n_dof_k],
+% where n is the number of nodes and k is the number of dofs per node.
+
 ndof = 3; % TODO to get from element?
 n = 4;    % TODO to get from element?
 F = sparse(ndof*(nely+1)*(nelx+1), 1);  
