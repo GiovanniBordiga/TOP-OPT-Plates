@@ -31,7 +31,7 @@ for elx = 1:nelx
                     (elx)*(nely+1) + ely
                     (elx-1)*(nely+1) + ely];
         for i = 1:n
-            DOFindex = union(DOFindex, nodesnum(i):nodesnum(i)+ndof-1);
+            DOFindex = cat(2, DOFindex, nodesnum(i):nodesnum(i)+ndof-1);
         end
     end
 end
