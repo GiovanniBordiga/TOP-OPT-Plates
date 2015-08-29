@@ -1,8 +1,13 @@
 function xnew = OC(nelx, nely, x, FrVol, dC)
 % Implement the Optimality Criteria method for compliance optimization.
-% TODO describe parameters
+% 'nelx' and 'nely' are the number of element along the two dimensions.
+% 'x' is a nely-by-nelx matrix representing the density field on the plate.
+% 'FrVol' is the desired volume fraction at the optimum condition.
+% 'dC' is a nely-by-nelx matrix returned by the sensitivity analysis.
 
-l1 = 0; l2 = 1e20;  % limits to the volume Lagrange multiplier
+% WARNING: this code is written assuming unit element's area.
+
+l1 = 0; l2 = 1e9;  % limits to the volume Lagrange multiplier
 move = 0.2;         % limit to the change of 'x'
 FS = 0.5;           % stabilization factor
 % find the volume multiplier using a bisection method
