@@ -1,5 +1,5 @@
 function N = getSF(element, dims)
-
+% Return the Shape Functions of the given element.
 % 'element' is a string representing the finite element type.
 % 'dims' is a struct containing three attributes which specify the
 % element's dimensions: width, height, thickness.

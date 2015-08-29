@@ -1,5 +1,5 @@
 function U = FEM(nelx, nely, element, dims, material, x)
-
+% Solve the system KU=F.
 % 'nelx' and 'nely' are the number of element along the two dimensions.
 % 'element' is a string representing the finite element type.
 % 'dims' is a struct containing three attributes which specify the

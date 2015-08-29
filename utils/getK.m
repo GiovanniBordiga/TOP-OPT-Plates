@@ -1,5 +1,5 @@
 function [Kf, Ks] = getK(element, dims, material)
-
+% Return the stiffness matrices of the given element.
 % 'element' is a string representing the finite element type.
 % 'dims' is a struct containing three attributes which specify the
 % element's dimensions: width, height, thickness.
