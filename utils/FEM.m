@@ -6,7 +6,7 @@ function U = FEM(nelx, nely, element, dims, material, x)
 % element's dimensions: width, height, thickness.
 % 'material' is a struct containing two attribute: E (Young's modulus) and
 % v (Poisson's ratio).
-% 'x' is a nelx-by-nely matrix representing the density field on the plate.
+% 'x' is a nely-by-nelx matrix representing the density field on the plate.
 % 'U' is the global dofs vector.
 
 % the order of the element's dof are like: [node_1_dof_1 ... node_1_dof_k ...... node_n_dof_1 ... node_n_dof_k],
