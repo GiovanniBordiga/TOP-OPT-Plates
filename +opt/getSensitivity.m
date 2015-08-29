@@ -7,6 +7,8 @@ function dC = getSensitivity(nelx, nely, x, CoPen, Ke, U)
 % every element).
 % 'U' is the global dofs vector returned by FEM function.
 
+ndof = 3; % TODO to get from element?
+n = 4;    % TODO to get from element?
 dC = zeros(nely, nelx);
 for elx = 1:nelx
     for ely = 1:nely
@@ -16,7 +18,7 @@ for elx = 1:nelx
                     (elx)*(nely+1) + ely
                     (elx-1)*(nely+1) + ely];    % global nodes numbers of the current element
         for i = 1:n
-            eDOFindex = cat(2, DOFindex, (nodesnum(i)-1)*ndof+1:nodesnum(i)*ndof);
+            eDOFindex = cat(2, eDOFindex, (nodesnum(i)-1)*ndof+1:nodesnum(i)*ndof);
         end
         Ue = U(eDOFindex);      % dofs of the current element
         dC(ely, elx) = - CoPen * x(ely, elx)^(CoPen-1) * Ue'*Ke*Ue;
