@@ -1,4 +1,4 @@
-function U = FEM(nelx, nely, element, dims, material, x)
+function U = FEM(nelx, nely, element, dims, material, x, CoPen)
 % Solve the system KU=F.
 % 'nelx' and 'nely' are the number of element along the two dimensions.
 % 'element' is a string representing the finite element type.
@@ -53,7 +53,7 @@ end
 x = reshape(x', 1, nelx*nely);
 rowindex = kron(DOFindex, ones(1, ndof*n));
 colindex = reshape(kron(reshape(DOFindex, ndof*n, nelx*nely), ones(1, ndof*n)), 1, nelx*nely*(ndof*n)^2);
-K = sparse(rowindex, colindex, kron(x, reshape(Kf+Ks, 1, (ndof*n)^2)));
+K = sparse(rowindex, colindex, kron(x.^CoPen, reshape(Kf+Ks, 1, (ndof*n)^2)));
 
 % define loads and constraints - MODIFY AS YOU LIKE
 F(1:3:3*(nely+1)*(nelx+1),1) = 1;
