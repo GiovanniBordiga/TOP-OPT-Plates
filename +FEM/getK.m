@@ -11,6 +11,7 @@ function [Kf, Ks] = getK(element, dims, material)
 % the order of the element's dof are like: [node_1_dof_1 ... node_1_dof_k ...... node_n_dof_1 ... node_n_dof_k],
 % where n is the number of nodes and k is the number of dofs per node.
 
+import FEM.*
 syms x y z; E = material.E; v = material.v;
 N = getSF(element,dims);
 Cf = E/(1-v^2)*[1 v 0
