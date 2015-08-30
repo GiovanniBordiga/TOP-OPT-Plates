@@ -56,7 +56,7 @@ colindex = reshape(kron(reshape(DOFindex, ndof*n, nelx*nely), ones(1, ndof*n)), 
 K = sparse(rowindex, colindex, kron(x.^CoPen, reshape(Kf+Ks, 1, (ndof*n)^2)));
 
 % define loads and constraints - MODIFY AS YOU LIKE
-F(1:3:3*(nely+1)*(nelx+1),1) = 1;
+F(1:ndof:ndof*(nely+1)*(nelx+1),1) = 1;
 alldof = 1:ndof*(nelx+1)*(nely+1);
 fixeddof = 1:ndof*(nely+1); % one edge clamped
 freedof = setdiff(alldof, fixeddof);
