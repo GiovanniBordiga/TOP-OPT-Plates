@@ -1,4 +1,4 @@
-function U = FEM(nelx, nely, element, dims, material, x, CoPen)
+function U = FEM(problem, nelx, nely, element, dims, material, x, CoPen)
 % Solve the system KU=F.
 % 'nelx' and 'nely' are the number of element along the two dimensions.
 % 'element' is a string representing the finite element type.
@@ -55,12 +55,24 @@ rowindex = kron(DOFindex, ones(1, ndof*n));
 colindex = reshape(kron(reshape(DOFindex, ndof*n, nelx*nely), ones(1, ndof*n)), 1, nelx*nely*(ndof*n)^2);
 K = sparse(rowindex, colindex, kron(x.^CoPen, reshape(Kf+Ks, 1, (ndof*n)^2)));
 
-% define loads and constraints - MODIFY AS YOU LIKE
-F(1:ndof:ndof*(nely+1)*(nelx+1),1) = 1;
-alldof = 1:ndof*(nelx+1)*(nely+1);
-fixeddof = 1:ndof*(nely+1); % one edge clamped
-freedof = setdiff(alldof, fixeddof);
-U(fixeddof) = 0;
+% loads and constraints
+switch problem
+    case 'test'
+        F(1:ndof:ndof*(nely+1)*(nelx+1)) = 1;   % distributed load
+        alldof = 1:ndof*(nelx+1)*(nely+1);
+        fixeddof = 1:ndof*(nely+1);             % one edge clamped
+        freedof = setdiff(alldof, fixeddof);
+        U(fixeddof) = 0;
+    case 'a'
+        F(ndof*(nely+1)*nelx/2 + 1) = 1;        % concentrated load
+        alldof = 1:ndof*(nelx+1)*(nely+1);
+        left = 1:ndof:ndof*nely+1;              % supported left edge
+        bottom = ndof*nely+1:ndof*(nely+1):ndof*((nely+1)*(nelx+1)-1)+1; % supported bottom edge
+        right = ndof*(nely+1)*nelx+1:ndof:ndof*((nely+1)*(nelx+1)-1)+1; % supported right edge
+        fixeddof = union(union(left, bottom), right);
+        freedof = setdiff(alldof, fixeddof);    % free top edge
+        U(fixeddof) = 0;
+end
 
 % solve the system
 U(freedof) = K(freedof, freedof) \ F(freedof);

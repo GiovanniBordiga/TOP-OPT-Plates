@@ -1,6 +1,9 @@
 import FEM.*
 import opt.*
 
+%% PROBLEM SELECTION
+problem = 'a';
+
 %% INITIALIZE GEOMETRY & MATERIAL
 nelx = 40; nely = 10;               % number of plate elements 
 dims.width = 1; dims.height = 1; dims.thickness = 1; % element's dimensions
@@ -18,7 +21,7 @@ maxiter = 5;                % maximum number of iteration (convergence)
 iter = 0;                   % iteration counter
 Ke = getK(element, dims, material);
 while change > 1e-3 && iter < maxiter
-    U = FEM(nelx, nely, element, dims, material, x, CoPen); % solve FEM
+    U = FEM(problem, nelx, nely, element, dims, material, x, CoPen); % solve FEM
     [dC, C] = getSensitivity(nelx, nely, x, CoPen, Ke, U);  % sensitivity analysis
     xnew = OC(nelx, nely, x, FrVol, dC);                    % get new densities
     change = max(max(abs(xnew-x)));
