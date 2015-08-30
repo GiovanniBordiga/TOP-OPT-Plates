@@ -20,9 +20,11 @@ Ke = getK(element, dims, material);
 while change > 1e-3 && iter < maxiter
     % TODO optimize!
     U = FEM(nelx, nely, element, dims, material, x, CoPen);
-    dC = getSensitivity(nelx, nely, x, CoPen, Ke, U);
+    [dC, C] = getSensitivity(nelx, nely, x, CoPen, Ke, U);
     xnew = OC(nelx, nely, x, FrVol, dC);
     change = max(max(abs(xnew-x)));
     x = xnew;
     iter = iter + 1;
+    disp(['Iter: ' sprintf('%i', iter) ', Obj: ' sprintf('%.3f', C)...
+        ', Vol. frac.: ' sprintf('%.3f', sum(sum(x))/(nelx*nely))]);
 end
