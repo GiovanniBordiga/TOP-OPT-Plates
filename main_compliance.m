@@ -18,12 +18,11 @@ maxiter = 5;                % maximum number of iteration (convergence)
 iter = 0;                   % iteration counter
 Ke = getK(element, dims, material);
 while change > 1e-3 && iter < maxiter
-    % TODO optimize!
-    U = FEM(nelx, nely, element, dims, material, x, CoPen);
-    [dC, C] = getSensitivity(nelx, nely, x, CoPen, Ke, U);
-    xnew = OC(nelx, nely, x, FrVol, dC);
+    U = FEM(nelx, nely, element, dims, material, x, CoPen); % solve FEM
+    [dC, C] = getSensitivity(nelx, nely, x, CoPen, Ke, U);  % sensitivity analysis
+    xnew = OC(nelx, nely, x, FrVol, dC);                    % get new densities
     change = max(max(abs(xnew-x)));
-    x = xnew;
+    x = xnew;           % update densities
     iter = iter + 1;
     disp(['Iter: ' sprintf('%i', iter) ', Obj: ' sprintf('%.3f', C)...
         ', Vol. frac.: ' sprintf('%.3f', sum(sum(x))/(nelx*nely))]);
