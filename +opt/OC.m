@@ -7,7 +7,7 @@ function xnew = OC(nelx, nely, x, FrVol, dC)
 
 % WARNING: this code is written assuming unit element's area.
 
-l1 = 0; l2 = 1e9;  % limits to the volume Lagrange multiplier
+l1 = 0; l2 = 1e20;  % limits to the volume Lagrange multiplier
 move = 0.2;         % limit to the change of 'x'
 FS = 0.5;           % stabilization factor
 % find the volume multiplier using a bisection method
