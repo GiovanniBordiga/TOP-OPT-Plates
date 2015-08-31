@@ -17,11 +17,12 @@ CoPen = 3;                  % penalization coefficient used in the SIMP model
 RaFil = 2;                  % filter radius
 
 %% OPTIMIZATION CYCLE
-change = 1;                 % maximum density change in the plates (convergence)
+tol = 1e-3;                 % tolerance for convergence criteria
+change = 1;                 % density change in the plates (convergence)
 maxiter = 5;                % maximum number of iteration (convergence)
 iter = 0;                   % iteration counter
 [Kf, Ks] = getK(element, dims, material); Ke = Kf + Ks;
-while change > 1e-3 && iter < maxiter
+while change > tol && iter < maxiter
     U = FEM(problem, nelx, nely, element, dims, material, x, CoPen); % solve FEM
     [dC, C] = getSensitivity(nelx, nely, x, CoPen, Ke, U);  % sensitivity analysis
     dC = filterSensitivity(nelx, nely, x, dC, RaFil);       % apply sensitivity filter
