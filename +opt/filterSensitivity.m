@@ -1,8 +1,10 @@
 function dCnew = filterSensitivity(nelx, nely, R, x, dC)
-% Implement a mesh-indipendent sensitivity filter
+% Implement a mesh-indipendent sensitivity filter, using a linear weight function.
 % 'nelx' and 'nely' are the number of element along the two dimensions.
 % 'x' is a nely-by-nelx matrix representing the density field on the plate.
 % 'R' is the filter's radius
+
+% WARNING: this code is written assuming unit element's area.
 
 dCnew = zeros(nely, nelx);
 for elx = 1:nelx
