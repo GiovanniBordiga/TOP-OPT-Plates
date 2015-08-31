@@ -20,7 +20,7 @@ RaFil = 2;                  % filter radius
 change = 1;                 % maximum density change in the plates (convergence)
 maxiter = 5;                % maximum number of iteration (convergence)
 iter = 0;                   % iteration counter
-Ke = getK(element, dims, material);
+[Kf, Ks] = getK(element, dims, material); Ke = Kf + Ks;
 while change > 1e-3 && iter < maxiter
     U = FEM(problem, nelx, nely, element, dims, material, x, CoPen); % solve FEM
     [dC, C] = getSensitivity(nelx, nely, x, CoPen, Ke, U);  % sensitivity analysis
