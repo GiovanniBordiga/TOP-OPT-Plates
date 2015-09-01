@@ -24,7 +24,7 @@ iter = 0;                   % iteration counter
 [Kf, Ks] = getK(element, material); Ke = Kf + Ks;
 while change > tol && iter < maxiter
     U = FEM(problem, nelx, nely, element, material, x, CoPen); % solve FEM
-    [dC, C] = getSensitivity(nelx, nely, x, CoPen, Ke, U);  % sensitivity analysis
+    [dC, C] = getSensitivity(nelx, nely, element, x, CoPen, Ke, U);  % sensitivity analysis
     dC = filterSensitivity(nelx, nely, x, dC, RaFil);       % apply sensitivity filter
     xnew = OC(nelx, nely, x, FrVol, dC);                    % get new densities
     change = max(max(abs(xnew-x)));

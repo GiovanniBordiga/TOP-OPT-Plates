@@ -1,15 +1,16 @@
-function [dC, C] = getSensitivity(nelx, nely, x, CoPen, Ke, U)
+function [dC, C] = getSensitivity(nelx, nely, element, x, CoPen, Ke, U)
 % Return the sensitivity of the Lagrangian with respect to densities and
 % the value of the objective function (compliance).
 % 'nelx' and 'nely' are the number of element along the two dimensions.
+% 'element' is a FE object.
 % 'x' is a nely-by-nelx matrix representing the density field on the plate.
 % 'CoPen' is the penalization coefficient used in the SIMP model.
 % 'Ke' is the stiffness matrix of an element (assuming that is the same for
 % every element).
 % 'U' is the global dofs vector returned by FEM function.
 
-ndof = 3; % TODO to get from element?
-n = 4;    % TODO to get from element?
+n = element.getNodes();     % nodes
+ndof = element.getNDof();   % dofs per node
 dC = zeros(nely, nelx);
 C = 0;
 for elx = 1:nelx
