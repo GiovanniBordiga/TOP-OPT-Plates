@@ -2,10 +2,10 @@ classdef FE
     % Class representing a finite element.
     
     properties
-        type            % string representing the element type
-        dims            % struct which defines the element's dimensions: width, height, thickness
-        nodes           % number of nodes
-        ndof            % number of dofs per node
+        type        % string representing the element type
+        dims        % struct which defines the element's dimensions: width, height, thickness
+        nodes       % number of nodes
+        ndof        % number of dofs per node
     end
     
     methods

@@ -1,7 +1,7 @@
 function [Kf, Ks] = getK(element, material)
 % Return the stiffness matrices of the given element.
 % 'element' is a FE object.
-% 'material' is a struct containing two attribute: E (Young's modulus) and
+% 'material' is a struct containing two attributes: E (Young's modulus) and
 % v (Poisson's ratio).
 % 'Kf' is the matrix of the flexural elastic energy.
 % 'Ks' is the matrix of the shear elastic energy (zero for Kirchhoff elements).

@@ -1,6 +1,6 @@
 function xnew = filterDensity(nelx, nely, x, R)
 % Implement a mesh-indipendent density filter, using a linear weight function.
-% 'nelx' and 'nely' are the number of element along the two dimensions.
+% 'nelx' and 'nely' are the number of elements along the two dimensions.
 % 'x' is a nely-by-nelx matrix representing the density field on the plate.
 % 'R' is the filter's radius
 

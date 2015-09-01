@@ -19,7 +19,7 @@ RaFil = 2;                  % filter radius
 %% OPTIMIZATION CYCLE
 tol = 1e-3;                 % tolerance for convergence criteria
 change = 1;                 % density change in the plates (convergence)
-maxiter = 5;                % maximum number of iteration (convergence)
+maxiter = 5;                % maximum number of iterations (convergence)
 iter = 0;                   % iteration counter
 [Kf, Ks] = getK(element, material); Ke = Kf + Ks;
 while change > tol && iter < maxiter

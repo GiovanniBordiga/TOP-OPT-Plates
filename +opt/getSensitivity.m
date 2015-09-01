@@ -1,7 +1,7 @@
 function [dC, C] = getSensitivity(nelx, nely, element, x, CoPen, Ke, U)
 % Return the sensitivity of the Lagrangian with respect to densities and
 % the value of the objective function (compliance).
-% 'nelx' and 'nely' are the number of element along the two dimensions.
+% 'nelx' and 'nely' are the number of elements along the two dimensions.
 % 'element' is a FE object.
 % 'x' is a nely-by-nelx matrix representing the density field on the plate.
 % 'CoPen' is the penalization coefficient used in the SIMP model.
