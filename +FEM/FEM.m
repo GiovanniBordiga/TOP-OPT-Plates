@@ -1,9 +1,7 @@
-function U = FEM(problem, nelx, nely, element, dims, material, x, CoPen)
+function U = FEM(problem, nelx, nely, element, material, x, CoPen)
 % Solve the system KU=F.
 % 'nelx' and 'nely' are the number of element along the two dimensions.
-% 'element' is a string representing the finite element type.
-% 'dims' is a struct containing three attributes which specify the
-% element's dimensions: width, height, thickness.
+% 'element' is a FE object.
 % 'material' is a struct containing two attribute: E (Young's modulus) and
 % v (Poisson's ratio).
 % 'x' is a nely-by-nelx matrix representing the density field on the plate.
@@ -13,12 +11,12 @@ function U = FEM(problem, nelx, nely, element, dims, material, x, CoPen)
 % where n is the number of nodes and k is the number of dofs per node.
 
 import FEM.*
-ndof = 3; % TODO to get from element?
-n = 4;    % TODO to get from element?
+n = element.getNodes();
+ndof = element.getNDof();
 F = sparse(ndof*(nely+1)*(nelx+1), 1);  
 U = zeros(ndof*(nely+1)*(nelx+1), 1);
 
-[Kf, Ks] = getK(element, dims, material);
+[Kf, Ks] = getK(element, material);
 % assemble K assuming the same size for all the elements
 % probably not so efficient (TEST!)
 % for elx = 1:nelx

@@ -5,7 +5,7 @@ classdef FE
         type            % string representing the element type
         dims            % struct which defines the element's dimensions: width, height, thickness
         nodes           % number of nodes
-        ndof            % number of dof per node
+        ndof            % number of dofs per node
     end
     
     methods
@@ -21,7 +21,7 @@ classdef FE
                     obj.nodes = 4;
                     obj.ndof = 4;
                 % Mindlin
-                case 'MB4'
+                case 'MB4'      % Mindlin bilinear 4 nodes
                     obj.nodes = 4;
                     obj.ndof = 3;
             end

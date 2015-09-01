@@ -1,8 +1,6 @@
-function [Kf, Ks] = getK(element, dims, material)
+function [Kf, Ks] = getK(element, material)
 % Return the stiffness matrices of the given element.
-% 'element' is a string representing the finite element type.
-% 'dims' is a struct containing three attributes which specify the
-% element's dimensions: width, height, thickness.
+% 'element' is a FE object.
 % 'material' is a struct containing two attribute: E (Young's modulus) and
 % v (Poisson's ratio).
 % 'Kf' is the matrix of the flexural elastic energy.
@@ -12,14 +10,16 @@ function [Kf, Ks] = getK(element, dims, material)
 % where n is the number of nodes and k is the number of dofs per node.
 
 import FEM.*
-syms x y z; E = material.E; v = material.v;
-N = getSF(element,dims);
+syms x y z;
+E = material.E; v = material.v;
+dims = element.getDims();
+N = getSF(element);
 Cf = E/(1-v^2)*[1 v 0
                 v 1 0
                 0 0 (1-v)/2]*dims.thickness^3/12; % flexular constitutive matrix
 Cs = 5/6*E/(2*(1+v))*[1 0
                       0 1]*dims.thickness; % shear constitutive matrix
-switch element
+switch element.getType()
     % Kirchhoff
     case {'ACM', 'BMF'}
         Bf = [-diff(diff(N,x),x)
