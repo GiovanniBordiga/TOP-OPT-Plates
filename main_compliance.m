@@ -2,12 +2,12 @@ import FEM.*
 import opt.*
 
 %% PROBLEM SELECTION
-problem = 'a';
+problem = 'a';              % <https://goo.gl/FQdEKB link to image>
 
 %% INITIALIZE GEOMETRY, MATERIAL, DESIGN VARIABLE
-nelx = 40; nely = 10;               % number of plate elements 
+nelx = 40; nely = 10;       % number of plate elements 
 dims.width = 1; dims.height = 1; dims.thickness = 1; % element's dimensions
-element = 'ACM';                    % finite element type
+element = 'ACM';            % finite element type
 material.E = 1; material.v = 0.3;   % material properties
 FrVol = 0.3;                % volume fraction at the optimum condition
 x = ones(nely, nelx)*FrVol; % set uniform intial density
@@ -28,7 +28,7 @@ while change > tol && iter < maxiter
     dC = filterSensitivity(nelx, nely, x, dC, RaFil);       % apply sensitivity filter
     xnew = OC(nelx, nely, x, FrVol, dC);                    % get new densities
     change = max(max(abs(xnew-x)));
-    x = xnew;           % update densities
+    x = xnew;               % update densities
     iter = iter + 1;
     disp(['Iter: ' sprintf('%i', iter) ', Obj: ' sprintf('%.3f', C)...
         ', Vol. frac.: ' sprintf('%.3f', sum(sum(x))/(nelx*nely))]);
