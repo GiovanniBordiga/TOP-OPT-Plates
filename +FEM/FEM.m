@@ -64,6 +64,7 @@ switch problem
         freedof = setdiff(alldof, fixeddof);
         U(fixeddof) = 0;
     case 'a'
+        % <https://goo.gl/FQdEKB link to image of the problem>
         F(ndof*(nely+1)*nelx/2 + 1) = 1;        % concentrated load
         alldof = 1:ndof*(nelx+1)*(nely+1);
         left = 1:ndof:ndof*nely+1;              % supported left edge

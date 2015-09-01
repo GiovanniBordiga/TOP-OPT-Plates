@@ -2,7 +2,7 @@ import FEM.*
 import opt.*
 
 %% PROBLEM SELECTION
-problem = 'a';              % <https://goo.gl/FQdEKB link to image>
+problem = 'a';
 
 %% INITIALIZE GEOMETRY, MATERIAL, DESIGN VARIABLE
 nelx = 40; nely = 10;       % number of plate elements 
