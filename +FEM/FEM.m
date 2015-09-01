@@ -11,8 +11,8 @@ function U = FEM(problem, nelx, nely, element, material, x, CoPen)
 % where n is the number of nodes and k is the number of dofs per node.
 
 import FEM.*
-n = element.getNodes();
-ndof = element.getNDof();
+n = element.getNodes();     % nodes
+ndof = element.getNDof();   % dofs per node
 F = sparse(ndof*(nely+1)*(nelx+1), 1);  
 U = zeros(ndof*(nely+1)*(nelx+1), 1);
 
