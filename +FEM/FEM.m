@@ -55,10 +55,28 @@ K = sparse(rowindex, colindex, kron(x.^CoPen, reshape(Kf+Ks, 1, (ndof*n)^2)));
 
 % loads and constraints
 switch problem
-    case 'test'
-        F(1:ndof:ndof*(nely+1)*(nelx+1)) = 1;   % distributed load
+    case 'test1'
+        F(1:ndof:ndof*(nely+1)*(nelx+1)) = 0.001;   % ~distributed load
         alldof = 1:ndof*(nelx+1)*(nely+1);
         fixeddof = 1:ndof*(nely+1);             % one edge clamped
+        freedof = setdiff(alldof, fixeddof);
+        U(fixeddof) = 0;
+    case 'test2'
+        F(ndof*((nely+1)*nelx/2 + nely/2) + 1) = 1; % centered concentrated load
+        alldof = 1:ndof*(nelx+1)*(nely+1);
+        left = 1:ndof:ndof*nely+1;              % supported left edge
+        right = ndof*(nely+1)*nelx+1:ndof:ndof*((nely+1)*(nelx+1)-1)+1; % supported right edge
+        fixeddof = union(left, right);
+        freedof = setdiff(alldof, fixeddof);
+        U(fixeddof) = 0;
+    case 'test3'
+        F(ndof*((nely+1)*nelx/2 + nely/2) + 1) = 1; % centered concentrated load
+        alldof = 1:ndof*(nelx+1)*(nely+1);
+        left = 1:ndof:ndof*nely+1;              % supported left edge
+        bottom = ndof*nely+1:ndof*(nely+1):ndof*((nely+1)*(nelx+1)-1)+1; % supported bottom edge
+        right = ndof*(nely+1)*nelx+1:ndof:ndof*((nely+1)*(nelx+1)-1)+1; % supported right edge
+        top = 1:ndof*(nely+1):ndof*(nely+1)*nelx+1; % supported top edge
+        fixeddof = union(union(union(left, right), bottom), top);
         freedof = setdiff(alldof, fixeddof);
         U(fixeddof) = 0;
     case 'a'
