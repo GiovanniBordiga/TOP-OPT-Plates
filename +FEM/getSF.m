@@ -6,6 +6,8 @@ function N = getSF(element)
 
 % the order of the element's dof are like: [node_1_dof_1 ... node_1_dof_k ...... node_n_dof_1 ... node_n_dof_k],
 % where n is the number of nodes and k is the number of dofs per node.
+% the numeration of the element's nodes is anticlockwise starting from the
+% bottom left corner.
 
 import FEM.*
 syms x y;
