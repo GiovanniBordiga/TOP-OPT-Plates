@@ -10,4 +10,5 @@ colorbar;                       % display colorbar
 axis equal; axis tight;         % set axis to match plate dimensions
 title('Density field');         % set title
 xlabel('x'); ylabel('y');       % set axis labels
+drawnow;
 end

@@ -11,11 +11,13 @@ switch obj
         plot(iter, values);
         title('Convergence of the objective function: Compliance');
         xlabel('Iterations'); ylabel('Compliance');
+        drawnow;
     case 'x'
         % plot convergence in terms of density change
         figure(2);
         plot(iter, values);
         title('Convergence of the design variable: Density');
         xlabel('Iterations'); ylabel('Density change');
+        drawnow;
 end
 end

@@ -1,5 +1,6 @@
 import FEM.*
 import opt.*
+import plot.*
 
 %% PROBLEM SELECTION
 problem = 'a';
@@ -19,10 +20,13 @@ RaFil = 2;                  % filter radius
 %% OPTIMIZATION CYCLE
 tol = 1e-3;                 % tolerance for convergence criteria
 change = 1;                 % density change in the plates (convergence)
+changes = [];               % history of the density change (plot)
+Cs = [];                    % history of the compliance (plot)
 maxiter = 5;                % maximum number of iterations (convergence)
 iter = 0;                   % iteration counter
 [Kf, Ks] = getK(element, material); Ke = Kf + Ks;
 while change > tol && iter < maxiter
+    %% optimize
     U = FEM(problem, nelx, nely, element, material, x, CoPen); % solve FEM
     [dC, C] = getSensitivity(nelx, nely, element, x, CoPen, Ke, U);  % sensitivity analysis
     dC = filterSensitivity(nelx, nely, x, dC, RaFil);       % apply sensitivity filter
@@ -30,6 +34,15 @@ while change > tol && iter < maxiter
     change = max(max(abs(xnew-x)));
     x = xnew;               % update densities
     iter = iter + 1;
+    %% display results
     disp(['Iter: ' sprintf('%i', iter) ', Obj: ' sprintf('%.3f', C)...
         ', Vol. frac.: ' sprintf('%.3f', sum(sum(x))/(nelx*nely))]);
+    Cs = cat(2, Cs, C);
+    changes = cat(2, changes, change);
+    plotConvergence(1:iter, Cs, 'c');
+    plotConvergence(1:iter, changes, 'x');
+    plotDesign(x);
 end
+
+%% DISPLAY DEFORMED CONFIGURATION
+plotDeformed(nelx, nely, element, U);
