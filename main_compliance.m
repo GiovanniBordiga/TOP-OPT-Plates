@@ -8,7 +8,7 @@ problem = 'a';
 nelx = 40; nely = 10;       % number of plate elements 
 dims.width = 1; dims.height = 1; dims.thickness = 1; % element's dimensions
 element = FE('ACM', dims);  % build the finite element
-material.E = 1; material.v = 0.3;   % material properties
+material.E = 1000; material.v = 0.3;   % material properties
 FrVol = 0.3;                % volume fraction at the optimum condition
 x = ones(nely, nelx)*FrVol; % set uniform intial density
 
