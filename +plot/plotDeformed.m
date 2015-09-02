@@ -1,6 +1,8 @@
 function plotDeformed(nelx, nely, element, U)
-%PLOTDEFORMED Summary of this function goes here
-%   Detailed explanation goes here
+% Plot the deformed configuration of the plate.
+% 'nelx' and 'nely' are the number of elements along the two dimensions.
+% 'element' is a FE object.
+% 'U' is the global dof vector returned by FEM function.
 
 import FEM.*
 faces = [1 2 3 4; 1 2 6 5; 2 3 7 6; 3 4 8 7; 4 1 5 8; 5 6 7 8]; % element's faces for patch
