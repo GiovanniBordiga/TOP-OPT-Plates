@@ -30,7 +30,7 @@ switch element.getType()
     % Mindlin
     case 'MB4'
         Bf = [diff(N(2,:),x)
-              diff(N(3,:),x)
+              diff(N(3,:),y)
               diff(N(2,:),y) + diff(N(3,:),x)]; % flexural strain-displacement matrix
         Bs = [diff(N(1,:),x)
               diff(N(1,:),y)] + N(2:3,:); % shear strain-displacement matrix
