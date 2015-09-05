@@ -16,7 +16,7 @@ ndof = element.getNDof();   % dofs per node
 F = sparse(ndof*(nely+1)*(nelx+1), 1);  
 U = zeros(ndof*(nely+1)*(nelx+1), 1);
 
-[Kf, Ks] = getK(element, material);
+Ke = getK(element, material);
 % assemble K assuming the same size for all the elements
 % probably not so efficient (TEST!)
 % for elx = 1:nelx
@@ -51,7 +51,7 @@ end
 x = reshape(x, 1, nelx*nely);
 rowindex = kron(DOFindex, ones(1, ndof*n));
 colindex = reshape(kron(reshape(DOFindex, ndof*n, nelx*nely), ones(1, ndof*n)), 1, nelx*nely*(ndof*n)^2);
-K = sparse(rowindex, colindex, kron(x.^CoPen, reshape(Kf+Ks, 1, (ndof*n)^2)));
+K = sparse(rowindex, colindex, kron(x.^CoPen, reshape(Ke, 1, (ndof*n)^2)));
 
 % loads and constraints
 switch problem
