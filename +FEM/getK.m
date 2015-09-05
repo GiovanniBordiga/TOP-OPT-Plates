@@ -10,7 +10,7 @@ function [Kf, Ks] = getK(element, material)
 % where n is the number of nodes and k is the number of dofs per node.
 
 import FEM.*
-syms x y z;
+syms x y;
 E = material.E; v = material.v;
 dims = element.getDims();
 N = getSF(element);
