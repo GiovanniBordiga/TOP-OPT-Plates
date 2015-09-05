@@ -2,8 +2,8 @@ function U = FEM(problem, nelx, nely, element, material, x, CoPen)
 % Solve the system KU=F.
 % 'nelx' and 'nely' are the number of elements along the two dimensions.
 % 'element' is a FE object.
-% 'material' is a struct containing two attributes: E (Young's modulus) and
-% v (Poisson's ratio).
+% 'material' is a struct containing three attributes: E (Young's modulus),
+% v (Poisson's ratio) and rho (mass density).
 % 'x' is a nely-by-nelx matrix representing the density field on the plate.
 % 'U' is the global dofs vector.
 
