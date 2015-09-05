@@ -24,7 +24,7 @@ changes = [];               % history of the density change (plot)
 Cs = [];                    % history of the compliance (plot)
 maxiter = 5;                % maximum number of iterations (convergence)
 iter = 0;                   % iteration counter
-[Kf, Ks] = getK(element, material); Ke = Kf + Ks;
+Ke = getK(element, material);
 while change > tol && iter < maxiter
     %% optimize
     U = FEM(problem, nelx, nely, element, material, x, CoPen); % solve FEM
