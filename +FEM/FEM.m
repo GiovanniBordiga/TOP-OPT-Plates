@@ -1,19 +1,21 @@
 function U = FEM(problem, nelx, nely, element, material, x, CoPen)
 % Solve the system KU=F.
+% 'problem' is a Problem object.
 % 'nelx' and 'nely' are the number of elements along the two dimensions.
 % 'element' is a FE object.
 % 'material' is a struct containing three attributes: E (Young's modulus),
 % v (Poisson's ratio) and rho (mass density).
 % 'x' is a nely-by-nelx matrix representing the density field on the plate.
+% 'CoPen' is the penalization coefficient used in the SIMP model.
 % 'U' is the global dofs vector.
 
 % the order of the element's dof are like: [node_1_dof_1 ... node_1_dof_k ...... node_n_dof_1 ... node_n_dof_k],
 % where n is the number of nodes and k is the number of dofs per node.
 
 import FEM.*
+
 n = element.getNodes();     % nodes
 ndof = element.getNDof();   % dofs per node
-F = sparse(ndof*(nely+1)*(nelx+1), 1);  
 U = zeros(ndof*(nely+1)*(nelx+1), 1);
 
 Ke = getK(element, material);
@@ -53,44 +55,8 @@ rowindex = kron(DOFindex, ones(1, ndof*n));
 colindex = reshape(kron(reshape(DOFindex, ndof*n, nelx*nely), ones(1, ndof*n)), 1, nelx*nely*(ndof*n)^2);
 K = sparse(rowindex, colindex, kron(x.^CoPen, reshape(Ke, 1, (ndof*n)^2)));
 
-% loads and constraints
-switch problem
-    case 'test1'
-        F(1:ndof:ndof*(nely+1)*(nelx+1)) = 0.001;   % ~distributed load
-        alldof = 1:ndof*(nelx+1)*(nely+1);
-        fixeddof = 1:ndof*(nely+1);             % one edge clamped
-        freedof = setdiff(alldof, fixeddof);
-        U(fixeddof) = 0;
-    case 'test2'
-        F(ndof*((nely+1)*nelx/2 + nely/2) + 1) = 1; % centered concentrated load
-        alldof = 1:ndof*(nelx+1)*(nely+1);
-        left = 1:ndof:ndof*nely+1;              % supported left edge
-        right = ndof*(nely+1)*nelx+1:ndof:ndof*((nely+1)*(nelx+1)-1)+1; % supported right edge
-        fixeddof = union(left, right);
-        freedof = setdiff(alldof, fixeddof);
-        U(fixeddof) = 0;
-    case 'test3'
-        F(ndof*((nely+1)*nelx/2 + nely/2) + 1) = 1; % centered concentrated load
-        alldof = 1:ndof*(nelx+1)*(nely+1);
-        left = 1:ndof:ndof*nely+1;              % supported left edge
-        bottom = ndof*nely+1:ndof*(nely+1):ndof*((nely+1)*(nelx+1)-1)+1; % supported bottom edge
-        right = ndof*(nely+1)*nelx+1:ndof:ndof*((nely+1)*(nelx+1)-1)+1; % supported right edge
-        top = 1:ndof*(nely+1):ndof*(nely+1)*nelx+1; % supported top edge
-        fixeddof = union(union(union(left, right), bottom), top);
-        freedof = setdiff(alldof, fixeddof);
-        U(fixeddof) = 0;
-    case 'a'
-        % <https://goo.gl/FQdEKB link to image of the problem>
-        F(ndof*(nely+1)*nelx/2 + 1) = 1;        % concentrated load
-        alldof = 1:ndof*(nelx+1)*(nely+1);
-        left = 1:ndof:ndof*nely+1;              % supported left edge
-        bottom = ndof*nely+1:ndof*(nely+1):ndof*((nely+1)*(nelx+1)-1)+1; % supported bottom edge
-        right = ndof*(nely+1)*nelx+1:ndof:ndof*((nely+1)*(nelx+1)-1)+1; % supported right edge
-        fixeddof = union(union(left, bottom), right);
-        freedof = setdiff(alldof, fixeddof);    % free top edge
-        U(fixeddof) = 0;
-end
-
 % solve the system
+freedof = problem.freedof;
+F = problem.F;
 U(freedof) = K(freedof, freedof) \ F(freedof);
 end

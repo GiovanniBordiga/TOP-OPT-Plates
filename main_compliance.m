@@ -2,16 +2,16 @@ import FEM.*
 import opt.*
 import plot.*
 
-%% PROBLEM SELECTION
-problem = 'a';
-
 %% INITIALIZE GEOMETRY, MATERIAL, DESIGN VARIABLE
-nelx = 40; nely = 10;       % number of plate elements 
+nelx = 100; nely = 50;       % number of plate elements 
 dims.width = 1; dims.height = 1; dims.thickness = 1; % element's dimensions
 element = FE('ACM', dims);  % build the finite element
 material.E = 1000; material.v = 0.3;   % material properties
 FrVol = 0.3;                % volume fraction at the optimum condition
 x = ones(nely, nelx)*FrVol; % set uniform intial density
+
+%% PROBLEM SELECTION
+problem = Problem(nelx, nely, element, 'a'); % list of problems in "FEM/Problem"
 
 %% INITIALIZE NUMERICAL VARIABLES
 CoPen = 3;                  % penalization coefficient used in the SIMP model
@@ -22,7 +22,7 @@ tol = 1e-3;                 % tolerance for convergence criteria
 change = 1;                 % density change in the plates (convergence)
 changes = [];               % history of the density change (plot)
 Cs = [];                    % history of the compliance (plot)
-maxiter = 5;                % maximum number of iterations (convergence)
+maxiter = 15;                % maximum number of iterations (convergence)
 iter = 0;                   % iteration counter
 Ke = getK(element, material);
 while change > tol && iter < maxiter
