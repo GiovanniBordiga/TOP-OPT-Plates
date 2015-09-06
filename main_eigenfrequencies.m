@@ -12,7 +12,7 @@ x = ones(nely, nelx)*FrVol; % set uniform intial density
 
 %% PROBLEM SELECTION
 problem = Problem(nelx, nely, element, 'a'); % list of problems in "FEM/Problem"
-nModes = 1;                 % number of eigenmodes to compute
+nModes = 5;                 % number of eigenmodes to compute
 
 %% INITIALIZE NUMERICAL VARIABLES
 PenK = 3;                   % stiffness penalization factor used in the SIMP model
@@ -24,7 +24,7 @@ tol = 1e-3;                 % tolerance for convergence criteria
 change = 1;                 % density change in the plates (convergence)
 changes = [];               % history of the density change (plot)
 eigenFs = [];               % history of the eigenfrequencies (plot)
-maxiter = 5;               % maximum number of iterations (convergence)
+maxiter = 15;               % maximum number of iterations (convergence)
 iter = 0;                   % iteration counter
 Ke = getK(element, material);
 Me = getM(element, material);
@@ -40,9 +40,9 @@ while change > tol && iter < maxiter
     x = xnew;               % update densities
     iter = iter + 1;
     %% display results
-    disp(['Iter: ' sprintf('%i', iter) ', Obj: ' sprintf('%.3f', eigenF(end))...
+    disp(['Iter: ' sprintf('%i', iter) ', Obj: ' sprintf('%.3f', min(eigenF))...
         ', Vol. frac.: ' sprintf('%.3f', sum(sum(x))/(nelx*nely))]);
-    eigenFs = cat(2, eigenFs, eigenF(end));
+    eigenFs = cat(2, eigenFs, min(eigenF));
     changes = cat(2, changes, change);
     plotConvergence(1:iter, eigenFs, 'f');
     plotConvergence(1:iter, changes, 'x');

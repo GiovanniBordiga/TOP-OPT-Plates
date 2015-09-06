@@ -12,8 +12,8 @@ function dF = getFSensitivity(nelx, nely, element, x, PenK, PenM, Ke, Me, eigenF
 n = element.getNodes();     % nodes
 ndof = element.getNDof();   % dofs per node
 dF = zeros(nely, nelx);
-lowF = eigenF(end);         % get the lowest eigenfrequency
-lowM = eigenM(:, end);      % get the corresponding eigenmode
+lowF = min(eigenF);         % get the lowest eigenfrequency
+lowM = eigenM(:, eigenF==lowF);      % get the corresponding eigenmode
 for elx = 1:nelx
     for ely = 1:nely
         eDOFindex = [];     % global dofs index of the current element, needed to access the element's dofs from 'lowM'
