@@ -1,4 +1,4 @@
-function [dC, C] = getSensitivity(nelx, nely, element, x, CoPen, Ke, U)
+function [dC, C] = getCSensitivity(nelx, nely, element, x, CoPen, Ke, U)
 % Return the sensitivity of the Lagrangian with respect to densities and
 % the value of the objective function (compliance).
 % 'nelx' and 'nely' are the number of elements along the two dimensions.
