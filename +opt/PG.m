@@ -9,9 +9,10 @@ function xnew = PG(nelx, nely, x, FrVol, dF)
 %          to minimize compliance pass dF.
 %          to maximize eigenfrequency pass -dF.
 
+move = 0.2;
 stepsize = 1;
 l = sum(sum(dF))/(nelx*nely);
 % stepsize = (FrVol*nelx*nely - sum(sum(x)))/(sum(sum(-dF + l)));
-xnew = max(0.001, min(1, x + stepsize*(-dF + l)));
+xnew = max(0.001, max(x-move, min(1, min(x+move, x + stepsize*(-dF + l)))));
 end
 
