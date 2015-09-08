@@ -26,27 +26,6 @@ classdef FE
                     obj.ndof = 3;
             end
         end
-        function type = getType(obj)
-            type = obj.type;
-        end
-        function dims = getDims(obj)
-            dims = obj.dims;
-        end
-        function width = getWidth(obj)
-            width = obj.dims.width;
-        end
-        function height = getHeight(obj)
-            height = obj.dims.height;
-        end
-        function thickness = getThickness(obj)
-            thickness = obj.dims.thickness;
-        end
-        function nodes = getNodes(obj)
-            nodes = obj.nodes;
-        end
-        function ndof = getNDof(obj)
-            ndof = obj.ndof;
-        end
     end
     
 end

@@ -7,9 +7,9 @@ function M = getM(element, material)
 
 import FEM.*
 syms x y;
-dx = element.getWidth();
-dy = element.getHeight();
-dz = element.getThickness();
+dx = element.dims.width;
+dy = element.dims.height;
+dz = element.dims.thickness;
 rho = material.rho;         % mass density
 N = getSF(element);
 C = [dz 0 0

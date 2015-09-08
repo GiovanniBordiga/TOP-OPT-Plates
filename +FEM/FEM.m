@@ -14,8 +14,8 @@ function U = FEM(problem, nelx, nely, element, material, x, CoPen)
 
 import FEM.*
 
-n = element.getNodes();     % nodes
-ndof = element.getNDof();   % dofs per node
+n = element.nodes;     % nodes
+ndof = element.ndof;   % dofs per node
 U = zeros(ndof*(nely+1)*(nelx+1), 1);
 
 Ke = getK(element, material);
