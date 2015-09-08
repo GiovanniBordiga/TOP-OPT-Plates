@@ -45,4 +45,4 @@ while change > tol && iter < maxiter
 end
 
 %% DISPLAY DEFORMED CONFIGURATION
-plotDeformed(nelx, nely, element, U);
+plotDeformed(nelx, nely, element, x.^CoPen, Ke, U);

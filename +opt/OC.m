@@ -3,7 +3,7 @@ function xnew = OC(nelx, nely, x, FrVol, dF)
 % 'nelx' and 'nely' are the number of elements along the two dimensions.
 % 'x' is a nely-by-nelx matrix representing the density field on the plate.
 % 'FrVol' is the desired volume fraction at the optimum condition.
-% 'dC' is a nely-by-nelx matrix returned by the sensitivity analysis.
+% 'dF' is a nely-by-nelx matrix returned by the sensitivity analysis.
 
 % WARNING: this code is written assuming unit element's area.
 %          to minimize compliance pass dF.
