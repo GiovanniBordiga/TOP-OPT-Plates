@@ -9,8 +9,8 @@ function [dC, C] = getCSensitivity(nelx, nely, element, x, CoPen, Ke, U)
 % every element).
 % 'U' is the global dofs vector returned by FEM function.
 
-n = element.getNodes();     % nodes
-ndof = element.getNDof();   % dofs per node
+n = element.nodes;     % nodes
+ndof = element.ndof;   % dofs per node
 dC = zeros(nely, nelx);
 C = 0;
 for elx = 1:nelx

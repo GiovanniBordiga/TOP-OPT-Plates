@@ -18,7 +18,7 @@ classdef Problem
             obj.nelx = nelx;
             obj.nely = nely;
             obj.problemId = problemId;
-            ndof = element.getNDof();
+            ndof = element.ndof;
             % loads and constraints
             obj.F = sparse(ndof*(nely+1)*(nelx+1), 1);
             switch obj.problemId
