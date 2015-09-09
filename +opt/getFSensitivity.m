@@ -25,7 +25,9 @@ for elx = 1:nelx
             eDOFindex = cat(2, eDOFindex, (nodesnum(i)-1)*ndof+1:nodesnum(i)*ndof);
         end
         lowMe = lowM(eDOFindex);      % dofs of the current element
-        dF(ely, elx) = lowMe'*(PenK*x(ely, elx)^(PenK-1)*Ke - lowF * PenM*x(ely, elx)^(PenM-1)*Me)*lowMe;
+        dKe = PenK*x(ely, elx)^(PenK-1)*Ke;
+        dMe = PenM*x(ely, elx)^(PenM-1)*Me;
+        dF(ely, elx) = lowMe'*(dKe - lowF * dMe)*lowMe; %/(lowM'*M*lowM);
     end
 end
 end
