@@ -10,8 +10,8 @@ function xnew = OC(nelx, nely, x, FrVol, dF)
 %          to maximize eigenfrequency pass -dF.
 
 l1 = 0; l2 = 1e20;  % limits to the volume Lagrange multiplier
-move = 0.2;         % limit to the change of 'x'
-FS = 0.5;           % stabilization factor
+move = 0.1;         % limit to the change of 'x'
+FS = 0.05;           % stabilization factor
 % find the volume multiplier using a bisection method
 while (l2-l1 > 1e-9)
     lmid = 0.5*(l2+l1);
