@@ -13,8 +13,8 @@ function [eigenF, eigenM] = eigenFM(problem, nelx, nely, element, material, x, P
 
 import FEM.*
 
-n = element.getNodes();     % nodes
-ndof = element.getNDof();   % dofs per node
+n = element.nodes;     % nodes
+ndof = element.ndof;   % dofs per node
 Ke = getK(element, material);
 Me = getM(element, material);
 

@@ -9,8 +9,8 @@ function dF = getFSensitivity(nelx, nely, element, x, PenK, PenM, Ke, Me, eigenF
 % 'eigenF' is the vector of the eigenvalues.
 % 'eigenM' is the matrix of the eigenvectors (stored as columns).
 
-n = element.getNodes();     % nodes
-ndof = element.getNDof();   % dofs per node
+n = element.nodes;     % nodes
+ndof = element.ndof;   % dofs per node
 dF = zeros(nely, nelx);
 lowF = min(eigenF);         % get the lowest eigenfrequency
 lowM = eigenM(:, eigenF==lowF);      % get the corresponding eigenmode

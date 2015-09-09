@@ -15,7 +15,7 @@ N = getSF(element);
 C = [dz 0 0
      0 dz^3/12 0
      0 0 dz^3/12]*rho;
-switch element.getType()
+switch element.type
     % Kirchhoff
     case {'ACM', 'BMF'}
         B = [N; -diff(N, x); -diff(N, y)];
