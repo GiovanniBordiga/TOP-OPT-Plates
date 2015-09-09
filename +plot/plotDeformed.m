@@ -3,6 +3,9 @@ function plotDeformed(nelx, nely, element, xpen, Ke, U)
 % distribution of the elastic energy.
 % 'nelx' and 'nely' are the number of elements along the two dimensions.
 % 'element' is a FE object.
+% 'xpen' is the nely-by-nelx matrix 'x' already penalized (x.^CoPen).
+% 'Ke' is the stiffness matrix of an element (assuming that is the same for
+% every element).
 % 'U' is the global dof vector returned by FEM function.
 
 faces = [1 2 3 4; 1 2 6 5; 2 3 7 6; 3 4 8 7; 4 1 5 8; 5 6 7 8]; % element's faces for patch
