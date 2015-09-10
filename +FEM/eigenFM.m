@@ -42,7 +42,7 @@ M = sparse(rowindex, colindex, kron(x.^PenM, reshape(Me, 1, (ndof*n)^2)));
 % solve the eigenvalues problem
 eigenM = zeros(ndof*(nely+1)*(nelx+1), nModes);
 freedof = problem.freedof;
-[V, D] = eigs(K(freedof, freedof), M(freedof, freedof), nModes, 'sm');
+[V, D] = eigs(K(freedof, freedof), M(freedof, freedof), nModes, 'sm'); % returned the 'nModes' smallest eigenvalues and relative eigenvectors (normalized to unit modulus)
 eigenF = diag(D);
 eigenM(freedof,:) = V;
 end
