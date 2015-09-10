@@ -1,6 +1,5 @@
 function [dC, C] = getCSensitivity(nelx, nely, element, x, CoPen, Ke, U)
-% Return the sensitivity of the Lagrangian with respect to densities and
-% the value of the objective function (compliance).
+% Return the sensitivity of the compliance with respect to densities.
 % 'nelx' and 'nely' are the number of elements along the two dimensions.
 % 'element' is a FE object.
 % 'x' is a nely-by-nelx matrix representing the density field on the plate.
@@ -8,6 +7,8 @@ function [dC, C] = getCSensitivity(nelx, nely, element, x, CoPen, Ke, U)
 % 'Ke' is the stiffness matrix of an element (assuming that is the same for
 % every element).
 % 'U' is the global dofs vector returned by FEM function.
+% 'dC' and 'C' are, respectively, the sensitivity (stored as a matrix) and
+% the total compliance.
 
 n = element.nodes;     % nodes
 ndof = element.ndof;   % dofs per node
