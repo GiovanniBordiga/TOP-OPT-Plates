@@ -16,6 +16,8 @@ problem = Problem(nelx, nely, element, 'a'); % list of problems in "FEM/Problem"
 %% INITIALIZE NUMERICAL VARIABLES
 CoPen = 3;                  % penalization coefficient used in the SIMP model
 RaFil = 2;                  % filter radius
+move = 0.2;                 % limit to the change of 'x' (optimum)
+SF = 0.5;                   % stabilization factor (optimum)
 
 %% OPTIMIZATION CYCLE
 tol = 1e-3;                 % tolerance for convergence criteria
@@ -30,7 +32,7 @@ while change > tol && iter < maxiter
     U = FEM(problem, nelx, nely, element, material, x, CoPen); % solve FEM
     [dC, C] = getCSensitivity(nelx, nely, element, x, CoPen, Ke, U);  % sensitivity analysis
     dC = filterSensitivity(nelx, nely, x, dC, RaFil);       % apply sensitivity filter
-    xnew = OC(nelx, nely, x, FrVol, dC);                    % get new densities
+    xnew = OC(nelx, nely, x, FrVol, dC, move, SF);          % get new densities
     change = max(max(abs(xnew-x)));
     x = xnew;               % update densities
     iter = iter + 1;
