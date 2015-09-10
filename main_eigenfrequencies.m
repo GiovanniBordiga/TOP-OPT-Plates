@@ -18,8 +18,8 @@ nModes = 5;                 % number of eigenmodes to compute
 PenK = 3;                   % stiffness penalization factor used in the SIMP model
 PenM = 3;                   % mass penalization factor used in the SIMP model
 RaFil = 2;                  % filter radius
-move = 0.1;                 % limit to the change of 'x' (optimum)
-SF = 0.1;                   % stabilization factor (optimum)
+move = 0.5;                 % limit to the change of 'x' (optimum)
+stepsize = 1;               % step factor along the gradient (optimum)
 
 %% OPTIMIZATION CYCLE
 tol = 1e-3;                 % tolerance for convergence criteria
@@ -37,7 +37,7 @@ while change > tol && iter < maxiter
     dF = getFSensitivity(nelx, nely, element, x,...
         PenK, PenM, Ke, Me, eigenF, eigenM);                % sensitivity analysis
     dF = filterSensitivity(nelx, nely, x, dF, RaFil);       % apply sensitivity filter
-    xnew = OC(nelx, nely, x, FrVol, -dF, move, SF);         % get new densities
+    xnew = PG(nelx, nely, x, FrVol, -dF, move, stepsize);   % get new densities
     change = max(max(abs(xnew-x)));
     x = xnew;               % update densities
     iter = iter + 1;

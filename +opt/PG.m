@@ -1,4 +1,4 @@
-function xnew = PG(nelx, nely, x, FrVol, dF)
+function xnew = PG(nelx, nely, x, FrVol, dF, move, stepsize)
 % Implement a Projected Gradient method.
 % 'nelx' and 'nely' are the number of elements along the two dimensions.
 % 'x' is a nely-by-nelx matrix representing the density field on the plate.
@@ -9,8 +9,6 @@ function xnew = PG(nelx, nely, x, FrVol, dF)
 %          to minimize compliance pass dF.
 %          to maximize eigenfrequency pass -dF.
 
-move = 0.2;
-stepsize = 1;
 l = sum(sum(dF))/(nelx*nely);
 % stepsize = (FrVol*nelx*nely - sum(sum(x)))/(sum(sum(-dF + l)));
 xnew = max(0.001, max(x-move, min(1, min(x+move, x + stepsize*(-dF + l)))));
