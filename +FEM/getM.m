@@ -12,13 +12,16 @@ dy = element.dims.height;
 dz = element.dims.thickness;
 rho = material.rho;         % mass density
 N = getSF(element);
-switch element.getType()
+C = [dz 0 0
+     0 dz^3/12 0
+     0 0 dz^3/12]*rho;
+switch element.type
+    % Kirchhoff
     case {'ACM', 'BMF'}
-        % TODO thinking...
+        B = [N; -diff(N, x); -diff(N, y)];
+        M = double(int(int(B'*C*B, y, -dy/2, dy/2), x, -dx/2, dx/2));
+    % Mindlin
     case 'MB4'
-        C = [dz 0 0
-             0 dz^3/12 0
-             0 0 dz^3/12]*rho;
         M = double(int(int(N'*C*N, y, -dy/2, dy/2), x, -dx/2, dx/2));
 end
 end
