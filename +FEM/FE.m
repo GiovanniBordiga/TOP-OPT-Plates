@@ -9,6 +9,7 @@ classdef FE
     end
     
     methods
+        % Constructor: call this method to create a finite element object
         function obj = FE(type, dims)
             obj.type = type;
             obj.dims = dims;
