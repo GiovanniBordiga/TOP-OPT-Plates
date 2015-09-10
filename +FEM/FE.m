@@ -9,6 +9,7 @@ classdef FE
     end
     
     methods
+        % Constructor: call this method to create a finite element object
         function obj = FE(type, dims)
             obj.type = type;
             obj.dims = dims;
@@ -25,27 +26,6 @@ classdef FE
                     obj.nodes = 4;
                     obj.ndof = 3;
             end
-        end
-        function type = getType(obj)
-            type = obj.type;
-        end
-        function dims = getDims(obj)
-            dims = obj.dims;
-        end
-        function width = getWidth(obj)
-            width = obj.dims.width;
-        end
-        function height = getHeight(obj)
-            height = obj.dims.height;
-        end
-        function thickness = getThickness(obj)
-            thickness = obj.dims.thickness;
-        end
-        function nodes = getNodes(obj)
-            nodes = obj.nodes;
-        end
-        function ndof = getNDof(obj)
-            ndof = obj.ndof;
         end
     end
     

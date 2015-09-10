@@ -12,6 +12,13 @@ switch obj
         title('Convergence of the objective function: Compliance');
         xlabel('Iterations'); ylabel('Compliance');
         drawnow;
+    case 'f'
+        % plot convergence in terms of the lowest eigenfrequency
+        figure(1);
+        plot(iter, values);
+        title('Convergence of the objective function: Foundamental frequency');
+        xlabel('Iterations'); ylabel('Foundamental frequency');
+        drawnow;
     case 'x'
         % plot convergence in terms of density change
         figure(2);

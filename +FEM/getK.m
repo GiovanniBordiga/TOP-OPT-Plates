@@ -11,16 +11,16 @@ function Ke = getK(element, material)
 import FEM.*
 syms x y;
 E = material.E; v = material.v;
-dx = element.getWidth();
-dy = element.getHeight();
-dz = element.getThickness();
+dx = element.dims.width;
+dy = element.dims.height;
+dz = element.dims.thickness;
 N = getSF(element);
 Cf = E/(1-v^2)*[1 v 0
                 v 1 0
                 0 0 (1-v)/2]*dz^3/12; % flexural constitutive matrix
 Cs = 5/6*E/(2*(1+v))*[1 0
                       0 1]*dz; % shear constitutive matrix
-switch element.getType()
+switch element.type
     % Kirchhoff
     case {'ACM', 'BMF'}
         Bf = [-diff(diff(N, x), x)

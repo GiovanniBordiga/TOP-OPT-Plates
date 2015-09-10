@@ -11,10 +11,10 @@ function N = getSF(element)
 
 import FEM.*
 syms x y;
-dims = element.getDims();   % element's dimensions
-n = element.getNodes();     % nodes
-ndof = element.getNDof();   % dofs per node
-switch element.getType()
+dims = element.dims;   % element's dimensions
+n = element.nodes;     % nodes
+ndof = element.ndof;   % dofs per node
+switch element.type
     % Kirchhoff
     case 'ACM'
         P = [1 x y x^2 x*y y^2 x^3 x^2*y x*y^2 y^3 x^3*y x*y^3]'; % w=P'a
