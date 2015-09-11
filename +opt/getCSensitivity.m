@@ -1,4 +1,4 @@
-function [dC, C] = getCSensitivity(nelx, nely, element, x, CoPen, Ke, U)
+function [dC, C] = getCSensitivity(nelx, nely, element, x, CoPen, U)
 % Return the sensitivity of the compliance with respect to densities.
 % 'nelx' and 'nely' are the number of elements along the two dimensions.
 % 'element' is a FE object.
@@ -12,6 +12,7 @@ function [dC, C] = getCSensitivity(nelx, nely, element, x, CoPen, Ke, U)
 
 n = element.nodes;     % nodes
 ndof = element.ndof;   % dofs per node
+Ke = element.K;
 dC = zeros(nely, nelx);
 C = 0;
 for elx = 1:nelx

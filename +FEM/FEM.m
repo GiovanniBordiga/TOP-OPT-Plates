@@ -1,24 +1,20 @@
-function U = FEM(problem, nelx, nely, element, material, x, CoPen)
+function U = FEM(problem, nelx, nely, element, x, CoPen)
 % Solve the system KU=F.
 % 'problem' is a Problem object.
 % 'nelx' and 'nely' are the number of elements along the two dimensions.
 % 'element' is a FE object.
-% 'material' is a struct containing three attributes: E (Young's modulus),
-% v (Poisson's ratio) and rho (mass density).
 % 'x' is a nely-by-nelx matrix representing the density field on the plate.
 % 'CoPen' is the penalization coefficient used in the SIMP model.
 % 'U' is the global dofs vector.
 
-% the order of the element's dof are like: [node_1_dof_1 ... node_1_dof_k ...... node_n_dof_1 ... node_n_dof_k],
-% where n is the number of nodes and k is the number of dofs per node.
-
-import FEM.*
+% The global numbering of the plate's dofs is ordered by columns.
 
 n = element.nodes;     % nodes
 ndof = element.ndof;   % dofs per node
+Ke = element.K;
+
 U = zeros(ndof*(nely+1)*(nelx+1), 1);
 
-Ke = getK(element, material);
 % assemble K assuming the same size for all the elements
 % probably not so efficient (TEST!)
 % for elx = 1:nelx

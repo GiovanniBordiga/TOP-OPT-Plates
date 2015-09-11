@@ -1,5 +1,11 @@
 classdef FE
     % Class representing a finite element.
+    % This class supports three types of finite element, two Kirchhoff
+    % elements (ACM and BMF) and one Mindlin element (MB4).
+    % The order of the element's dof are like: [node_1_dof_1 ... node_1_dof_k ...... node_n_dof_1 ... node_n_dof_k],
+    % where n is the number of nodes and k is the number of dofs per node.
+    % The numeration of the element's nodes is anticlockwise starting from
+    % the bottom left corner.
     
     properties
         type        % string representing the element type.
@@ -8,7 +14,7 @@ classdef FE
         ndof        % number of dofs per node.
         material    % struct containing three attributes: E (Young's modulus),
                     % v (Poisson's ratio) and rho (mass density).
-        N           % shape functions m-by-n matrix where n is the number
+        N           % shape functions m-by-n matrix, where n is the number
                     % of fields modeled and n is the number of dofs per element.
         K           % stiffness matrix.
         M           % mass matrix.
@@ -38,6 +44,7 @@ classdef FE
             element.M = element.buildM();
         end
         
+        % Shape functions builder
         function N = buildSF(element)
             syms x y;
             dims = element.dims;   % element's dimensions
@@ -65,7 +72,7 @@ classdef FE
                         A(ndof*(i-1)+1:ndof*i,:) = subs([P'; Px'; Py'; Pxy'], {x,y}, {coord(i,1), coord(i,2)});
                     end
                     N = (P'*A^-1); % Nw=P'(A^-1)w
-                    % Mindlin
+                % Mindlin
                 case 'MB4'          % Mindlin bilinear 4 nodes
                     P = [1 x y x*y]';
                     A = zeros(n); % Aa=w
@@ -79,6 +86,7 @@ classdef FE
             end
         end
         
+        % Stiffness matrix builder
         function K = buildK(element)
             syms x y;
             E = element.material.E; v = element.material.v;
@@ -98,7 +106,7 @@ classdef FE
                           -diff(diff(N, y), y)
                           -2*diff(diff(N, x), y)]; % strain-displacement matrix
                     K = double(int(int(Bf'*Cf*Bf, y, -dy/2, dy/2), x, -dx/2, dx/2));
-                    % Mindlin
+                % Mindlin
                 case 'MB4'
                     Bf = [diff(N(2,:), x)
                           diff(N(3,:), y)
@@ -109,6 +117,7 @@ classdef FE
             end
         end
         
+        % Mass matrix builder
         function M = buildM(element)
             syms x y;
             dx = element.dims.width;
@@ -124,7 +133,7 @@ classdef FE
                 case {'ACM', 'BMF'}
                     B = [N; -diff(N, x); -diff(N, y)]; %#ok<*PROP>
                     M = double(int(int(B'*C*B, y, -dy/2, dy/2), x, -dx/2, dx/2));
-                    % Mindlin
+                % Mindlin
                 case 'MB4'
                     M = double(int(int(N'*C*N, y, -dy/2, dy/2), x, -dx/2, dx/2));
             end
@@ -132,4 +141,3 @@ classdef FE
     end
     
 end
-

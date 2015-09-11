@@ -1,4 +1,4 @@
-function dF = getFSensitivity(nelx, nely, element, x, PenK, PenM, Ke, Me, eigenF, eigenM)
+function dF = getFSensitivity(nelx, nely, element, x, PenK, PenM, eigenF, eigenM)
 % Return the sensitivity of the lowest eigenfrequency with respect to densities.
 % 'nelx' and 'nely' are the number of elements along the two dimensions.
 % 'element' is a FE object.
@@ -11,6 +11,8 @@ function dF = getFSensitivity(nelx, nely, element, x, PenK, PenM, Ke, Me, eigenF
 
 n = element.nodes;     % nodes
 ndof = element.ndof;   % dofs per node
+Ke = element.K;
+Me = element.M;
 dF = zeros(nely, nelx);
 lowF = min(eigenF);         % get the lowest eigenfrequency
 lowM = eigenM(:, eigenF==lowF);      % get the corresponding eigenmode

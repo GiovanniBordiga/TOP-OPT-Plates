@@ -3,10 +3,10 @@ import opt.*
 import plot.*
 
 %% INITIALIZE GEOMETRY, MATERIAL, DESIGN VARIABLE
-nelx = 100; nely = 50;       % number of plate elements 
-dims.width = 1; dims.height = 1; dims.thickness = 1; % element's dimensions
-element = FE('ACM', dims);  % build the finite element
-material.E = 1000; material.v = 0.3;   % material properties
+nelx = 100; nely = 50;      % number of plate elements 
+dims.width = 1; dims.height = 1; dims.thickness = 1;    % element's dimensions
+material.E = 1000; material.v = 0.3; material.rho = 1;  % material properties
+element = FE('ACM', dims, material);                    % build the finite element
 FrVol = 0.3;                % volume fraction at the optimum condition
 x = ones(nely, nelx)*FrVol; % set uniform intial density
 
@@ -26,11 +26,10 @@ changes = [];               % history of the density change (plot)
 Cs = [];                    % history of the compliance (plot)
 maxiter = 15;                % maximum number of iterations (convergence)
 iter = 0;                   % iteration counter
-Ke = getK(element, material);
 while change > tol && iter < maxiter
     %% optimize
-    U = FEM(problem, nelx, nely, element, material, x, CoPen); % solve FEM
-    [dC, C] = getCSensitivity(nelx, nely, element, x, CoPen, Ke, U);  % sensitivity analysis
+    U = FEM(problem, nelx, nely, element, x, CoPen); % solve FEM
+    [dC, C] = getCSensitivity(nelx, nely, element, x, CoPen, U);  % sensitivity analysis
     dC = filterSensitivity(nelx, nely, x, dC, RaFil);       % apply sensitivity filter
     xnew = OC(nelx, nely, x, FrVol, dC, move, SF);          % get new densities
     change = max(max(abs(xnew-x)));
@@ -47,4 +46,4 @@ while change > tol && iter < maxiter
 end
 
 %% DISPLAY DEFORMED CONFIGURATION
-plotDeformed(nelx, nely, element, x.^CoPen, Ke, U);
+plotDeformed(nelx, nely, element, x.^CoPen, U);

@@ -1,4 +1,4 @@
-function plotDeformed(nelx, nely, element, xpen, Ke, U)
+function plotDeformed(nelx, nely, element, xpen, U)
 % Plot the deformed configuration of the plate colored with the
 % distribution of the elastic energy.
 % 'nelx' and 'nely' are the number of elements along the two dimensions.
@@ -14,6 +14,8 @@ ndof = element.ndof;   % dofs per node
 dx = element.dims.width;
 dy = element.dims.height;
 dz = element.dims.thickness;
+Ke = element.K;
+
 figure(4);
 colorbar;
 axis equal; axis tight;         % set axis to match plate dimensions

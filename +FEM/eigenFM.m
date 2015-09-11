@@ -1,22 +1,18 @@
-function [eigenF, eigenM] = eigenFM(problem, nelx, nely, element, material, x, PenK, PenM, nModes)
+function [eigenF, eigenM] = eigenFM(problem, nelx, nely, element, x, PenK, PenM, nModes)
 % Solve the eigenvalues problem K - omega^2*M = 0.
 % 'problem' is a Problem object.
 % 'nelx' and 'nely' are the number of elements along the two dimensions.
 % 'element' is a FE object.
-% 'material' is a struct containing three attributes: E (Young's modulus),
-% v (Poisson's ratio) and rho (mass density).
 % 'x' is a nely-by-nelx matrix representing the density field on the plate.
 % 'PenK' and 'PenM' are the penalization coefficients used in the SIMP model.
 % 'nModes' is the number of eigenmodes (or eigenfrequencies) to return.
 % 'eigenF' is the vector of the 'nModes' eigenvalues.
 % 'eigenM' is the matrix of the 'nModes' eigenvectors (stored as columns).
 
-import FEM.*
-
 n = element.nodes;     % nodes
 ndof = element.ndof;   % dofs per node
-Ke = getK(element, material);
-Me = getM(element, material);
+Ke = element.K;
+Me = element.M;
 
 % create global dof index
 DOFindex = [];
