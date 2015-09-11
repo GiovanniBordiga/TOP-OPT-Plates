@@ -9,20 +9,19 @@ function N = getSF(element)
 % the numeration of the element's nodes is anticlockwise starting from the
 % bottom left corner.
 
-import FEM.*
 syms x y;
 dims = element.dims;   % element's dimensions
 n = element.nodes;     % nodes
 ndof = element.ndof;   % dofs per node
+coord = [-dims.width/2 -dims.height/2
+          dims.width/2 -dims.height/2
+          dims.width/2  dims.height/2
+         -dims.width/2  dims.height/2]; % nodes coordinates
 switch element.type
     % Kirchhoff
     case 'ACM'
         P = [1 x y x^2 x*y y^2 x^3 x^2*y x*y^2 y^3 x^3*y x*y^3]'; % w=P'a
         Px = diff(P,x); Py = diff(P,y);
-        coord = [-dims.width/2 -dims.height/2
-                  dims.width/2 -dims.height/2
-                  dims.width/2  dims.height/2
-                 -dims.width/2  dims.height/2]; % nodes coordinates
         A = zeros(n*ndof); % Aa=w
         for i = 1:n
             A(ndof*(i-1)+1:ndof*i,:) = subs([P'; Px'; Py'], {x,y}, {coord(i,1), coord(i,2)});
@@ -31,10 +30,6 @@ switch element.type
     case 'BMF'
         P = [1 x y x^2 x*y y^2 x^3 x^2*y x*y^2 y^3 x^3*y x^2*y^2 x*y^3 x^3*y^2 x^2*y^3 x^3*y^3]';
         Px = diff(P,x); Py = diff(P,y); Pxy = diff(Px,y);
-        coord = [-dims.width/2 -dims.height/2
-                  dims.width/2 -dims.height/2
-                  dims.width/2  dims.height/2
-                 -dims.width/2  dims.height/2]; % nodes coordinates
         A = zeros(n*ndof); % Aa=w
         for i = 1:n
             A(ndof*(i-1)+1:ndof*i,:) = subs([P'; Px'; Py'; Pxy'], {x,y}, {coord(i,1), coord(i,2)});
@@ -43,10 +38,6 @@ switch element.type
     % Mindlin
     case 'MB4'          % Mindlin bilinear 4 nodes
         P = [1 x y x*y]';
-        coord = [-dims.width/2 -dims.height/2
-                  dims.width/2 -dims.height/2
-                  dims.width/2  dims.height/2
-                 -dims.width/2  dims.height/2]; % nodes coordinates
         A = zeros(n); % Aa=w
         for i = 1:n
             A(i,:) = subs(P, {x,y}, {coord(i,1), coord(i,2)})';
