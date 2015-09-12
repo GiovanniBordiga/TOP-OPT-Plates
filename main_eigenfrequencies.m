@@ -1,3 +1,16 @@
+%% MAIN SCRIPT FOR EIGENFREQUENCY OPTIMIZATION
+% Three types of finite element are supported: two Kirchhoff elements
+% (ACM and BMF) and one Mindlin element (here called MB4). To use the
+% desired finite element just plug the corresponding string in the
+% initialization of the 'FE' object.
+% Boundary conditions (constraints and loads) are specified in the
+% 'Problem' class and initialized through its object 'problem' passing the
+% appropriate string ('problemId') to the constructor. For a full list of
+% available problems, see the 'Problem' class in the 'FEM' package.
+% To set the volume constraint of the optimization problem, use the volume
+% fraction variable 'FrVol'.
+%%
+
 import FEM.*
 import opt.*
 import plot.*

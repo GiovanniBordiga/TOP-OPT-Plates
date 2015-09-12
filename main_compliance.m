@@ -1,9 +1,22 @@
+%% MAIN SCRIPT FOR COMPLIANCE OPTIMIZATION
+% Three types of finite element are supported: two Kirchhoff elements
+% (ACM and BMF) and one Mindlin element (here called MB4). To use the
+% desired finite element just plug the corresponding string in the
+% initialization of the 'FE' object.
+% Boundary conditions (constraints and loads) are specified in the
+% 'Problem' class and initialized through its object 'problem' passing the
+% appropriate string ('problemId') to the constructor. For a full list of
+% available problems, see the 'Problem' class in the 'FEM' package.
+% To set the volume constraint of the optimization problem, use the volume
+% fraction variable 'FrVol'.
+%%
+
 import FEM.*
 import opt.*
 import plot.*
 
 %% INITIALIZE GEOMETRY, MATERIAL, DESIGN VARIABLE
-nelx = 100; nely = 50;      % number of plate elements 
+nelx = 100; nely = 50;      % number of plate elements along the two axes
 dims.width = 1; dims.height = 1; dims.thickness = 1;    % element's dimensions
 material.E = 1000; material.v = 0.3; material.rho = 1;  % material properties
 element = FE('ACM', dims, material);                    % build the finite element
