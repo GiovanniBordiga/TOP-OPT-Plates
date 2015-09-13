@@ -16,7 +16,6 @@ Me = element.M;
 dF = zeros(nely, nelx);
 lowF = min(eigenF);         % get the lowest eigenfrequency
 lowM = eigenM(:, eigenF==lowF);      % get the corresponding eigenmode
-% PenM = x; PenM(PenM<0.1) = 6; PenM(PenM~=6) = 3;
 for elx = 1:nelx
     for ely = 1:nely
         eDOFindex = [];     % global dofs index of the current element, needed to access the element's dofs from 'lowM'
@@ -30,7 +29,7 @@ for elx = 1:nelx
         lowMe = lowM(eDOFindex);      % dofs of the current element
         dKe = PenK*x(ely, elx)^(PenK-1)*Ke;
         dMe = PenM*x(ely, elx)^(PenM-1)*Me;
-        dF(ely, elx) = lowMe'*(dKe - lowF * dMe)*lowMe; % it should be divided by (lowM'*M*lowM)
+        dF(ely, elx) = lowMe'*(dKe - lowF * dMe)*lowMe;
     end
 end
 end

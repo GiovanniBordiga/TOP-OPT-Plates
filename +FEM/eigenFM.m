@@ -29,7 +29,6 @@ for elx = 1:nelx
 end
 % assemble K and M assuming the same size for all the elements
 x = reshape(x, 1, nelx*nely);
-% PenM = x; PenM(PenM<0.1) = 6; PenM(PenM~=6) = 3;
 rowindex = kron(DOFindex, ones(1, ndof*n));
 colindex = reshape(kron(reshape(DOFindex, ndof*n, nelx*nely), ones(1, ndof*n)), 1, nelx*nely*(ndof*n)^2);
 K = sparse(rowindex, colindex, kron(x.^PenK, reshape(Ke, 1, (ndof*n)^2)));
@@ -38,7 +37,7 @@ M = sparse(rowindex, colindex, kron(x.^PenM, reshape(Me, 1, (ndof*n)^2)));
 % solve the eigenvalues problem
 eigenM = zeros(ndof*(nely+1)*(nelx+1), nModes);
 freedof = problem.freedof;
-[V, D] = eigs(K(freedof, freedof), M(freedof, freedof), nModes, 'sm'); % returned the 'nModes' smallest eigenvalues and relative eigenvectors (normalized to unit modulus)
+[V, D] = eigs(K(freedof, freedof), M(freedof, freedof), nModes, 'sm'); % returned the 'nModes' smallest eigenvalues and relative eigenvectors (normalized to unit modal masses)
 eigenF = diag(D);
 eigenM(freedof,:) = V;
 end
