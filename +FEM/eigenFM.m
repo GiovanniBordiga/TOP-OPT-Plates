@@ -1,4 +1,4 @@
-function [eigenF, eigenM] = eigenFM(problem, nelx, nely, element, x, PenK, PenM, nModes)
+function [eigenF, eigenM] = eigenFM(problem, element, x, PenK, PenM, nModes)
 % Solve the eigenvalues problem K - omega^2*M = 0.
 % 'problem' is a Problem object.
 % 'nelx' and 'nely' are the number of elements along the two dimensions.
@@ -9,6 +9,10 @@ function [eigenF, eigenM] = eigenFM(problem, nelx, nely, element, x, PenK, PenM,
 % 'eigenF' is the vector of the 'nModes' eigenvalues.
 % 'eigenM' is the matrix of the 'nModes' eigenvectors (stored as columns).
 
+% The global numbering of the plate's dofs is ordered by columns.
+
+nelx = problem.nelx;
+nely = problem.nely;
 n = element.nodes;     % nodes
 ndof = element.ndof;   % dofs per node
 Ke = element.K;

@@ -1,4 +1,4 @@
-function U = FEM(problem, nelx, nely, element, x, CoPen)
+function U = FEM(problem, element, x, CoPen)
 % Solve the system KU=F.
 % 'problem' is a Problem object.
 % 'nelx' and 'nely' are the number of elements along the two dimensions.
@@ -9,6 +9,8 @@ function U = FEM(problem, nelx, nely, element, x, CoPen)
 
 % The global numbering of the plate's dofs is ordered by columns.
 
+nelx = problem.nelx;
+nely = problem.nely;
 n = element.nodes;     % nodes
 ndof = element.ndof;   % dofs per node
 Ke = element.K;

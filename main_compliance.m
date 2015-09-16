@@ -41,8 +41,8 @@ maxiter = 15;                % maximum number of iterations (convergence)
 iter = 0;                   % iteration counter
 while change > tol && iter < maxiter
     %% optimize
-    U = FEM(problem, nelx, nely, element, x, CoPen); % solve FEM
-    [dC, C] = getCSensitivity(nelx, nely, element, x, CoPen, U);  % sensitivity analysis
+    U = FEM(problem, element, x, CoPen);                            % solve FEM
+    [dC, C] = getCSensitivity(nelx, nely, element, x, CoPen, U);    % sensitivity analysis
     dC = filterSensitivity(nelx, nely, x, dC, RaFil);       % apply sensitivity filter
     xnew = OC(nelx, nely, x, FrVol, dC, move, SF);          % get new densities
     change = max(max(abs(xnew-x)));
