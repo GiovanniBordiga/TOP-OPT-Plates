@@ -23,7 +23,7 @@ classdef Problem
             obj.F = sparse(ndof*(nely+1)*(nelx+1), 1);
             alldof = 1:ndof*(nelx+1)*(nely+1);
             switch obj.problemId
-            % <https://goo.gl/nv4plv link to image of the problems>
+            % <https://goo.gl/v4SDZr link to image of the problems>
                 case 'test1'
                     obj.F(1:ndof:ndof*(nely+1)*(nelx+1)) = 0.001;   % ~distributed load
                     obj.fixeddof = 1:ndof*(nely+1);                 % left edge clamped
@@ -46,19 +46,32 @@ classdef Problem
                     right = ndof*(nely+1)*nelx+1:ndof:ndof*((nely+1)*(nelx+1)-1)+1;  % supported right edge
                     obj.fixeddof = union(union(left, bottom), right);
                 case 'b'
+                    % same as case 'a' with clamped edge
+                    obj.F(ndof*(nely+1)*nelx/2 + 1) = 1;        % concentrated load
+                    left = 1:ndof*(nely+1);                       % clamped left edge
+                    bottom = [];
+                    for i = 1:ndof
+                        bottom_new = ndof*nely+i:ndof*(nely+1):ndof*((nely+1)*(nelx+1)-1)+i;     % clamped bottom edge
+                        bottom = union(bottom_new, bottom);
+                    end
+                    right = ndof*(nely+1)*nelx+1:ndof*(nely+1)*(nelx+1);                   % supported right edge
+                    obj.fixeddof = union(union(left, bottom), right);
+                case 'c'
                     obj.F(ndof*(nely+1)*nelx/2 + 1) = 1;            % concentrated load in the middle
                     left = 1:ndof:ndof*nely+1;                      % supported left edge
                     right = ndof*(nely+1)*nelx+1:ndof:ndof*((nely+1)*(nelx+1)-1)+1; % supported right edge
                     obj.fixeddof = union(left, right);
-                case 'c'
+                case 'd'
                     obj.F(1) = 1;                                   % concentrated load on the left corner
                     obj.F((ndof*(nely+1)*nelx/2) + 1) = 1;          % concentrated load in the middle
                     obj.F((ndof*(nely+1)*nelx) + 1) = 1;            % concentrated load on right corner
-                    bottom = ndof*nely+1:ndof*(nely+1):ndof*((nely+1)*(nelx+1)-1)+1;
-                    for i = 0:ndof-1
-                        obj.fixeddof = cat(2, obj.fixeddof, bottom + i); % bottom edge clamped
+                    bottom = [];
+                    for i = 1:ndof
+                        bottom_new = ndof*nely+i:ndof*(nely+1):ndof*((nely+1)*(nelx+1)-1)+i;     % clamped bottom edge
+                        bottom = union(bottom_new, bottom);
                     end
-                case 'd'
+                    obj.fixeddof = bottom;
+                case 'e'
                     obj.F(ndof*(nely+1)*nelx + 1) = 1;              % concentrated load right corner
                     obj.fixeddof = 1:ndof*(nely+1);                 % left edge clamped
             end
