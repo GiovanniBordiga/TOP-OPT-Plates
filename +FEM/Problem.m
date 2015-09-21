@@ -8,6 +8,7 @@ classdef Problem
         nelx            % number of elements along the x axis
         nely            % number of elements along the y axis
         problemId       % string identifing certain boundary conditions
+        DOFindex        % global dofs' index
         fixeddof        % idexes of the constrained dofs
         freedof         % idexes of the free dofs
         F               % global vector of loads
@@ -18,7 +19,9 @@ classdef Problem
             obj.nelx = nelx;
             obj.nely = nely;
             obj.problemId = problemId;
+            n = element.nodes;
             ndof = element.ndof;
+            
             % loads and constraints
             obj.F = sparse(ndof*(nely+1)*(nelx+1), 1);
             alldof = 1:ndof*(nelx+1)*(nely+1);
@@ -76,6 +79,20 @@ classdef Problem
                     obj.fixeddof = 1:ndof*(nely+1);                 % left edge clamped
             end
             obj.freedof = setdiff(alldof, obj.fixeddof);
+            
+            % create global dofs' index
+            obj.DOFindex = [];
+            for elx = 1:nelx
+                for ely = 1:nely
+                    nodesnum = [(elx-1)*(nely+1) + ely + 1
+                                (elx)*(nely+1) + ely + 1
+                                (elx)*(nely+1) + ely
+                                (elx-1)*(nely+1) + ely];    % global nodes numbers of the current element
+                    for i = 1:n
+                        obj.DOFindex = cat(2, obj.DOFindex, (nodesnum(i)-1)*ndof+1:nodesnum(i)*ndof);
+                    end
+                end
+            end
         end
     end
     

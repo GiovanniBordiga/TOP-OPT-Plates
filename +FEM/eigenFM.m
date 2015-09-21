@@ -17,20 +17,8 @@ n = element.nodes;     % nodes
 ndof = element.ndof;   % dofs per node
 Ke = element.K;
 Me = element.M;
+DOFindex = problem.DOFindex;
 
-% create global dof index
-DOFindex = [];
-for elx = 1:nelx
-    for ely = 1:nely
-        nodesnum = [(elx-1)*(nely+1) + ely + 1
-                    (elx)*(nely+1) + ely + 1
-                    (elx)*(nely+1) + ely
-                    (elx-1)*(nely+1) + ely];    % global nodes numbers of the current element
-        for i = 1:n
-            DOFindex = cat(2, DOFindex, (nodesnum(i)-1)*ndof+1:nodesnum(i)*ndof);
-        end
-    end
-end
 % assemble K and M assuming the same size for all the elements
 x = reshape(x, 1, nelx*nely);
 rowindex = kron(DOFindex, ones(1, ndof*n));
