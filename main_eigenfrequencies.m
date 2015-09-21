@@ -52,8 +52,8 @@ while change > tol && iter < maxiter
         x, PenK, PenM, nModes);                             % solve the eigenvalues problem
     dF = getFSensitivity(nelx, nely, element, x,...
         PenK, PenM, eigenF, eigenM);                        % sensitivity analysis
-    dF = filterSensitivity(nelx, nely, x, dF, RaFil);       % apply sensitivity filter
-    xnew = OC(nelx, nely, x, FrVol, -dF, move, SF);         % get new densities
+    dF = filterSensitivity(nelx, nely, x, dF, RaFil);           % apply sensitivity filter
+    xnew = OC(nelx, nely, element, x, FrVol, -dF, move, SF);    % get new densities
     change = max(max(abs(xnew-x)));
     x = xnew;               % update densities
     iter = iter + 1;
