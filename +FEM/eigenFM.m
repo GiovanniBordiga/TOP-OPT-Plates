@@ -1,4 +1,4 @@
-function [eigenF, eigenM] = eigenFM(problem, element, x, PenK, PenM, nModes)
+function [eigenF, eigenM] = eigenFM(problem, element, x, PenK, PenM, optFindex)
 % Solve the eigenvalues problem K - omega^2*M = 0.
 % 'problem' is a Problem object.
 % 'nelx' and 'nely' are the number of elements along the two dimensions.
@@ -8,6 +8,7 @@ function [eigenF, eigenM] = eigenFM(problem, element, x, PenK, PenM, nModes)
 % 'nModes' is the number of eigenmodes (or eigenfrequencies) to return.
 % 'eigenF' is the vector of the 'nModes' eigenvalues.
 % 'eigenM' is the matrix of the 'nModes' eigenvectors (stored as columns).
+% 'optFindex' is the eigenvalue's index to optimize.
 
 % The global numbering of the plate's dofs is ordered by columns.
 
@@ -27,10 +28,24 @@ K = sparse(rowindex, colindex, kron(x.^PenK, reshape(Ke, 1, (ndof*n)^2)));
 M = sparse(rowindex, colindex, kron(x.^PenM, reshape(Me, 1, (ndof*n)^2)));
 
 % solve the eigenvalues problem
-eigenM = zeros(ndof*(nely+1)*(nelx+1), nModes);
+eigenM = zeros(ndof*(nely+1)*(nelx+1), optFindex);
 freedof = problem.freedof;
-[V, D] = eigs(K(freedof, freedof), M(freedof, freedof), nModes, 'sm'); % returned the 'nModes' smallest eigenvalues and relative eigenvectors (normalized to unit modal masses)
+[V, D] = eigs(K(freedof, freedof), M(freedof, freedof), optFindex, 'sm'); % returned the 'nModes' smallest eigenvalues and relative eigenvectors (normalized to unit modal masses)
 eigenF = diag(D);
 eigenM(freedof,:) = V;
+% return sorted eigenvectors and eigenvalues
+for i = 1:length(eigenF)
+    for j = i:length(eigenF)
+        if eigenF(j) < eigenF(i)
+            temp = eigenF(i);
+            eigenF(i) = eigenF(j);
+            eigenF(j) = temp;
+            
+            temp = eigenM(:, i);
+            eigenM(:, i) = eigenM(:, j);
+            eigenM(:, j) = temp;
+        end
+    end
+end
 end
 

@@ -31,6 +31,7 @@ x = ones(nely, nelx)*FrVol; % set uniform intial density
 %% PROBLEM SELECTION
 problem = Problem(nelx, nely, element, 'a'); % list of problems in "FEM/Problem"
 nModes = 5;                 % number of eigenmodes to compute
+optFindex = 1;              % eigenvalue's index to optimize
 
 %% INITIALIZE NUMERICAL VARIABLES
 PenK = 3;                   % stiffness penalization factor used in the SIMP model
@@ -49,16 +50,16 @@ iter = 0;                   % iteration counter
 while change > tol && iter < maxiter
     %% optimize
     [eigenF, eigenM] = eigenFM(problem, element,...
-        x, PenK, PenM, nModes);                             % solve the eigenvalues problem
+        x, PenK, PenM, optFindex);                              % solve the eigenvalues problem
     dF = getFSensitivity(nelx, nely, element, x,...
-        PenK, PenM, eigenF, eigenM);                        % sensitivity analysis
+        PenK, PenM, eigenF, eigenM, optFindex);                 % sensitivity analysis
     dF = filterSensitivity(nelx, nely, x, dF, RaFil);           % apply sensitivity filter
     xnew = OC(nelx, nely, element, x, FrVol, -dF, move, SF);    % get new densities
     change = max(max(abs(xnew-x)));
     x = xnew;               % update densities
     iter = iter + 1;
     %% display results
-    disp(['Iter: ' sprintf('%i', iter) ', Obj: ' sprintf('%.3f', min(eigenF))...
+    disp(['Iter: ' sprintf('%i', iter) ', Obj: ' sprintf('%.3f', eigenF(optFindex))...
         ', Vol. frac.: ' sprintf('%.3f', sum(sum(x))/(nelx*nely))]);
     eigenFs = cat(2, eigenFs, min(eigenF));
     changes = cat(2, changes, change);
