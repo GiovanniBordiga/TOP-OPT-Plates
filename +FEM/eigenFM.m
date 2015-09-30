@@ -1,4 +1,4 @@
-function [eigenF, eigenM] = eigenFM(problem, element, x, PenK, PenM, optFindex)
+function [eigenF, eigenM] = eigenFM(problem, element, x, PenK, PenM, optFindex, beta)
 % Solve the eigenvalues problem K - omega^2*M = 0.
 % 'problem' is a Problem object.
 % 'nelx' and 'nely' are the number of elements along the two dimensions.
@@ -9,6 +9,7 @@ function [eigenF, eigenM] = eigenFM(problem, element, x, PenK, PenM, optFindex)
 % 'eigenF' is the vector of the 'nModes' eigenvalues.
 % 'eigenM' is the matrix of the 'nModes' eigenvectors (stored as columns).
 % 'optFindex' is the eigenvalue's index to optimize.
+% 'beta' is a stabilization factor for the mass matrix.
 
 % The global numbering of the plate's dofs is ordered by columns.
 
@@ -26,6 +27,8 @@ rowindex = kron(DOFindex, ones(1, ndof*n));
 colindex = reshape(kron(reshape(DOFindex, ndof*n, nelx*nely), ones(1, ndof*n)), 1, nelx*nely*(ndof*n)^2);
 K = sparse(rowindex, colindex, kron(x.^PenK, reshape(Ke, 1, (ndof*n)^2)));
 M = sparse(rowindex, colindex, kron(x.^PenM, reshape(Me, 1, (ndof*n)^2)));
+Mfake = sparse(rowindex, colindex, kron(x.^PenM, reshape(eye(ndof*n)/4, 1, (ndof*n)^2)));
+M = M*(1-beta) + Mfake*beta;    % altering the mass matrix
 
 % solve the eigenvalues problem
 eigenM = zeros(ndof*(nely+1)*(nelx+1), optFindex);

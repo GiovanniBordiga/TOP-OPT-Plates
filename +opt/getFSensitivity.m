@@ -1,4 +1,4 @@
-function dF = getFSensitivity(nelx, nely, element, x, PenK, PenM, eigenF, eigenM, optFindex)
+function dF = getFSensitivity(nelx, nely, element, x, PenK, PenM, eigenF, eigenM, optFindex, beta)
 % Return the sensitivity of the lowest eigenfrequency with respect to densities.
 % 'nelx' and 'nely' are the number of elements along the two dimensions.
 % 'element' is a FE object.
@@ -9,6 +9,7 @@ function dF = getFSensitivity(nelx, nely, element, x, PenK, PenM, eigenF, eigenM
 % 'eigenF' is the vector of the eigenvalues.
 % 'eigenM' is the matrix of the eigenvectors (stored as columns).
 % 'optFindex' is the eigenvalue's index to optimize.
+% 'beta' is a stabilization factor for the mass matrix.
 
 n = element.nodes;     % nodes
 ndof = element.ndof;   % dofs per node
@@ -29,7 +30,8 @@ for elx = 1:nelx
         end
         Modee = Mode(eDOFindex);      % dofs of the current element
         dKe = PenK*x(ely, elx)^(PenK-1)*Ke;
-        dMe = PenM*x(ely, elx)^(PenM-1)*Me;
+        dMe = (1-beta)*(PenM*x(ely, elx)^(PenM-1)*Me)...
+               + beta*PenM*x(ely, elx)^(PenM-1)*eye(ndof*n)/4; % sensitivity of the altered mass matrix
         dF(ely, elx) = Modee'*(dKe - F * dMe)*Modee;
     end
 end
