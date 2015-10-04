@@ -37,8 +37,8 @@ optFindex = 1;              % eigenvalue's index to optimize
 PenK = 3;                   % stiffness penalization factor used in the SIMP model
 PenM = 3;                   % mass penalization factor used in the SIMP model
 RaFil = 2;                  % filter radius
-move = 0.1;                 % limit to the change of 'x' (optimum)
-SF = 0.1;                   % stabilization factor (optimum)
+move = 0.5;                 % limit to the change of 'x' (optimum)
+SF = 0.8;                   % stabilization factor (optimum)
 
 %% OPTIMIZATION CYCLE
 tol = 1e-3;                 % tolerance for convergence criteria
