@@ -14,11 +14,11 @@ function xnew = OC(nelx, nely, element, x, FrVol, dF, move, SF)
 
 Ae = element.dims.height * element.dims.width; % element's area
 l1 = 0; l2 = 1e20;  % limits to the volume Lagrange multiplier
-
+mu = max(max(dF));  % shift to the Lagrange multiplier (effective for objective different from compliance)
 % find the volume multiplier using a bisection method
 while (l2-l1 > 1e-9)
     lmid = 0.5*(l2+l1);
-    xnew = max(0.001, max(x-move, min(1., min(x+move, x.*(max(0.0001,-dF)./(lmid*Ae)).^SF))));
+    xnew = max(0.001, max(x-move, min(1., min(x+move, x.*((mu-dF)./(lmid*Ae)).^SF))));
     if sum(sum(xnew.*Ae)) - FrVol*nelx*nely*Ae > 0
         l1 = lmid;
     else

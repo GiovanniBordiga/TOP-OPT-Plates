@@ -37,9 +37,8 @@ optFindex = 1;              % eigenvalue's index to optimize
 PenK = 3;                   % stiffness penalization factor used in the SIMP model
 PenM = 3;                   % mass penalization factor used in the SIMP model
 RaFil = 2;                  % filter radius
-move = 0.1;                 % limit to the change of 'x' (optimum)
-SF = 0.1;                   % stabilization factor (optimum)
-beta = 0.5;                 % stabilization factor for the mass matrix
+move = 0.5;                 % limit to the change of 'x' (optimum)
+SF = 0.8;                   % stabilization factor (optimum)
 
 %% OPTIMIZATION CYCLE
 tol = 1e-3;                 % tolerance for convergence criteria
@@ -51,9 +50,9 @@ iter = 0;                   % iteration counter
 while change > tol && iter < maxiter
     %% optimize
     [eigenF, eigenM] = eigenFM(problem, element,...
-        x, PenK, PenM, optFindex, beta);                        % solve the eigenvalues problem
+        x, PenK, PenM, optFindex);                              % solve the eigenvalues problem
     dF = getFSensitivity(nelx, nely, element, x,...
-        PenK, PenM, eigenF, eigenM, optFindex, beta);           % sensitivity analysis
+        PenK, PenM, eigenF, eigenM, optFindex);                 % sensitivity analysis
     dF = filterSensitivity(nelx, nely, x, dF, RaFil);           % apply sensitivity filter
     xnew = OC(nelx, nely, element, x, FrVol, -dF, move, SF);    % get new densities
     change = max(max(abs(xnew-x)));
