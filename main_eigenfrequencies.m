@@ -62,7 +62,7 @@ while change > tol && iter < maxiter
     %% display results
     disp(['Iter: ' sprintf('%i', iter) ', Obj: ' sprintf('%.3f', eigenF(optFindex))...
         ', Vol. frac.: ' sprintf('%.3f', sum(sum(x))/(nelx*nely))]);
-    eigenFs = cat(2, eigenFs, min(eigenF));
+    eigenFs = cat(2, eigenFs, eigenF(optFindex));
     changes = cat(2, changes, change);
     plotConvergence(1:iter, eigenFs, 'f');
     plotConvergence(1:iter, changes, 'x');
