@@ -28,9 +28,9 @@ K = sparse(rowindex, colindex, kron(x.^PenK, reshape(Ke, 1, (ndof*n)^2)));
 M = sparse(rowindex, colindex, kron(x.^PenM, reshape(Me, 1, (ndof*n)^2)));
 
 % solve the eigenvalues problem
-eigenM = zeros(ndof*(nely+1)*(nelx+1), optFindex);
+eigenM = zeros(ndof*(nely+1)*(nelx+1), optFindex+3);
 freedof = problem.freedof;
-[V, D] = eigs(K(freedof, freedof), M(freedof, freedof), optFindex, 'sm'); % returned the 'nModes' smallest eigenvalues and relative eigenvectors (normalized to unit modal masses)
+[V, D] = eigs(K(freedof, freedof), M(freedof, freedof), optFindex+3, 'sm'); % returned the 'nModes' smallest eigenvalues and relative eigenvectors (normalized to unit modal masses)
 eigenF = diag(D);
 eigenM(freedof,:) = V;
 % return sorted eigenvectors and eigenvalues

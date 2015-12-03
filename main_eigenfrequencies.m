@@ -21,7 +21,7 @@ import opt.*
 import plot.*
 
 %% INITIALIZE GEOMETRY, MATERIAL, DESIGN VARIABLE
-nelx = 100; nely = 50;      % number of plate elements 
+nelx = 100; nely = 100;      % number of plate elements 
 dims.width = 1; dims.height = 1; dims.thickness = 1;            % element's dimensions
 material.E = 2.1e+11; material.v = 0.3; material.rho = 7800;    % material properties
 element = FE('MB4', dims, material);                            % build the finite element
@@ -29,9 +29,9 @@ FrVol = 0.3;                % volume fraction at the optimum condition
 x = ones(nely, nelx)*FrVol; % set uniform intial density
 
 %% PROBLEM SELECTION
-problem = Problem(nelx, nely, element, 'a'); % list of problems in "FEM/Problem"
+problem = Problem(nelx, nely, element, 'test3'); % list of problems in "FEM/Problem"
 nModes = 5;                 % number of eigenmodes to compute
-optFindex = 1;              % eigenvalue's index to optimize
+optFindex = 2;              % eigenvalue's index to optimize
 
 %% INITIALIZE NUMERICAL VARIABLES
 PenK = 3;                   % stiffness penalization factor used in the SIMP model
@@ -45,7 +45,7 @@ tol = 1e-3;                 % tolerance for convergence criteria
 change = 1;                 % density change in the plates (convergence)
 changes = [];               % history of the density change (plot)
 eigenFs = [];               % history of the eigenfrequencies (plot)
-maxiter = 15;               % maximum number of iterations (convergence)
+maxiter = 30;               % maximum number of iterations (convergence)
 iter = 0;                   % iteration counter
 while change > tol && iter < maxiter
     %% optimize
@@ -61,7 +61,7 @@ while change > tol && iter < maxiter
     %% display results
     disp(['Iter: ' sprintf('%i', iter) ', Obj: ' sprintf('%.3f', eigenF(optFindex))...
         ', Vol. frac.: ' sprintf('%.3f', sum(sum(x))/(nelx*nely))]);
-    eigenFs = cat(2, eigenFs, eigenF(optFindex));
+    eigenFs = cat(2, eigenFs, eigenF);
     changes = cat(2, changes, change);
     plotConvergence(1:iter, eigenFs, 'f');
     plotConvergence(1:iter, changes, 'x');
