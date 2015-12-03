@@ -67,3 +67,6 @@ while change > tol && iter < maxiter
     plotConvergence(1:iter, changes, 'x');
     plotDesign(x);
 end
+
+%% DISPLAY EIGENMODE
+plotDeformed(nelx, nely, element, x.^PenK, eigenM(:, optFindex));

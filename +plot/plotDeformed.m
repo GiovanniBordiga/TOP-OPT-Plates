@@ -39,7 +39,7 @@ for elx = 1:nelx
         ze = [ones(1,4)*(-dz/2) ones(1,4)*dz/2]';
         undef = [xe ye ze]; % undeformed vertices coordinates
         disp = [[Ue(2:ndof:end); Ue(2:ndof:end)].*ze [Ue(3:ndof:end); Ue(3:ndof:end)].*ze [Ue(1:ndof:end); Ue(1:ndof:end)]]; % vertices displacements
-        def = undef + disp; % deformed vertices coordinates
+        def = undef + disp*(sqrt(nelx^2+nely^2)/10)/max(abs(U)); % deformed vertices coordinates
         patch('Faces', faces, 'Vertices', def, 'FaceColor', 'flat',...
             'CDataMapping', 'scaled', 'EdgeColor', [0.1 0.1 0.1],...
             'FaceVertexCData', 0.5*xpen(ely, elx)*Ue'*Ke*Ue);
