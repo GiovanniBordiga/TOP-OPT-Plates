@@ -16,8 +16,13 @@ switch obj
         % plot convergence in terms of the lowest eigenfrequency
         figure(1);
         plot(iter, values);
-        title('Convergence of the objective function: Foundamental frequency');
-        xlabel('Iterations'); ylabel('Foundamental frequency');
+        names = '';
+        for i=1:size(values, 1)
+            names = strcat(names, sprintf('%.f°,', i));
+        end
+        legend(strsplit(names, ','));
+        title(sprintf('Convergence of the objective function: %.f° frequency', size(values, 1)-3));
+        xlabel('Iterations'); ylabel(sprintf('%.f° frequency', size(values, 1)));
         drawnow;
     case 'x'
         % plot convergence in terms of density change
