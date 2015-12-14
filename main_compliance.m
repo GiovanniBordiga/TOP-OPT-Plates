@@ -21,15 +21,15 @@ import opt.*
 import plot.*
 
 %% INITIALIZE GEOMETRY, MATERIAL, DESIGN VARIABLE
-nelx = 100; nely = 50;      % number of plate elements along the two axes
+nelx = 100; nely = 100;      % number of plate elements along the two axes
 dims.width = 1; dims.height = 1; dims.thickness = 1;    % element's dimensions
 material.E = 1000; material.v = 0.3; material.rho = 1;  % material properties
-element = FE('ACM', dims, material);                    % build the finite element
+element = FE('MB4', dims, material);                    % build the finite element
 FrVol = 0.3;                % volume fraction at the optimum condition
 x = ones(nely, nelx)*FrVol; % set uniform intial density
 
 %% PROBLEM SELECTION
-problem = Problem(nelx, nely, element, 'a'); % list of problems in "FEM/Problem"
+problem = Problem(nelx, nely, element, 'e'); % list of problems in "FEM/Problem"
 
 %% INITIALIZE NUMERICAL VARIABLES
 CoPen = 3;                  % penalization coefficient used in the SIMP model

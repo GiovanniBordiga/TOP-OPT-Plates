@@ -29,9 +29,9 @@ FrVol = 0.3;                % volume fraction at the optimum condition
 x = ones(nely, nelx)*FrVol; % set uniform intial density
 
 %% PROBLEM SELECTION
-problem = Problem(nelx, nely, element, 'test3'); % list of problems in "FEM/Problem"
+problem = Problem(nelx, nely, element, 'd1'); % list of problems in "FEM/Problem"
 nModes = 5;                 % number of eigenmodes to compute
-optFindex = 2;              % eigenvalue's index to optimize
+optFindex = 1;              % eigenvalue's index to optimize
 
 %% INITIALIZE NUMERICAL VARIABLES
 PenK = 3;                   % stiffness penalization factor used in the SIMP model
