@@ -12,7 +12,7 @@ The aim is to explore the topology optimization area by embedding its techniques
 The main functionalities implemented in the code are
 - *Compliance Optimization* (work of loads minimization)
 - *Eigenfrequencies Optimization*
-- Different types of finite element available (ACM, MBF, etc.)
+- Different types of finite element available (ACM, BMF, etc.)
 - Plots displaying *convergence*, *deformed configuration* and *eigenmodes*
 
 ## Future development
