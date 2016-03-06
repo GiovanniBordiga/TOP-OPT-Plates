@@ -4,7 +4,7 @@ MATLAB Code for Topology Optimization of Plates
 <add nice image>
 
 ## Overview
-This is a project developed by a small group of students of the [*University of Trento (Italy)*](http://www.unitn.it/) for the *Computational Mechanics of Structures 2* course.
+This is a project developed by a small group of students of the Civil Engineering Master Degree at the [*University of Trento (Italy)*](http://www.dicam.unitn.it/) for the *Computational Mechanics of Structures 2* course.
 
 The aim is to explore the topology optimization area by embedding its techniques into a structural application.
 <expand a bit here>
