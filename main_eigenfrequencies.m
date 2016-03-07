@@ -1,7 +1,7 @@
-%% MAIN SCRIPT FOR COMPLIANCE OPTIMIZATION
+%% MAIN SCRIPT FOR EIGENFREQUENCY OPTIMIZATION
 % This code implements an optimization procedure to find, given a certain
 % amount of available material, the mass distribution of a plate which 
-% minimizes its compliance (work of loads).
+% maximizes its foundamental (lowest) eigenfrequency.
 % Dimensions and material of the plate can be specified in the following
 % initialization section. Only rectangular plates are considered.
 % Three types of finite element are supported: two Kirchhoff elements
@@ -21,47 +21,52 @@ import opt.*
 import plot.*
 
 %% INITIALIZE GEOMETRY, MATERIAL, DESIGN VARIABLE
-nelx = 100; nely = 100;      % number of plate elements along the two axes
-dims.width = 1; dims.height = 1; dims.thickness = 1;    % element's dimensions
-material.E = 1000; material.v = 0.3; material.rho = 1;  % material properties
-element = FE('MB4', dims, material);                    % build the finite element
+nelx = 100; nely = 100;      % number of plate elements 
+dims.width = 1; dims.height = 1; dims.thickness = 1;            % element's dimensions
+material.E = 2.1e+11; material.v = 0.3; material.rho = 7800;    % material properties
+element = FE('MB4', dims, material);                            % build the finite element
 FrVol = 0.3;                % volume fraction at the optimum condition
 x = ones(nely, nelx)*FrVol; % set uniform intial density
 
 %% PROBLEM SELECTION
-problem = Problem(nelx, nely, element, 'e'); % list of problems in "FEM/Problem"
+problem = Problem(nelx, nely, element, 'd1'); % list of problems in "FEM/Problem"
+nModes = 5;                 % number of eigenmodes to compute
+optFindex = 1;              % eigenvalue's index to optimize
 
 %% INITIALIZE NUMERICAL VARIABLES
-CoPen = 3;                  % penalization coefficient used in the SIMP model
+PenK = 3;                   % stiffness penalization factor used in the SIMP model
+PenM = 3;                   % mass penalization factor used in the SIMP model
 RaFil = 2;                  % filter radius
-move = 0.2;                 % limit to the change of 'x' (optimum)
-SF = 0.5;                   % stabilization factor (optimum)
+move = 0.5;                 % limit to the change of 'x' (optimum)
+SF = 0.8;                   % stabilization factor (optimum)
 
 %% OPTIMIZATION CYCLE
 tol = 1e-3;                 % tolerance for convergence criteria
 change = 1;                 % density change in the plates (convergence)
 changes = [];               % history of the density change (plot)
-Cs = [];                    % history of the compliance (plot)
-maxiter = 15;                % maximum number of iterations (convergence)
+eigenFs = [];               % history of the eigenfrequencies (plot)
+maxiter = 30;               % maximum number of iterations (convergence)
 iter = 0;                   % iteration counter
 while change > tol && iter < maxiter
     %% optimize
-    U = FEM(problem, element, x, CoPen);                            % solve FEM
-    [dC, C] = getCSensitivity(nelx, nely, element, x, CoPen, U);    % sensitivity analysis
-    dC = filterSensitivity(nelx, nely, x, dC, RaFil);               % apply sensitivity filter
-    xnew = OC(nelx, nely, element, x, FrVol, dC, move, SF);         % get new densities
+    [eigenF, eigenM] = eigenFM(problem, element,...
+        x, PenK, PenM, optFindex);                              % solve the eigenvalues problem
+    dF = getFSensitivity(nelx, nely, element, x,...
+        PenK, PenM, eigenF, eigenM, optFindex);                 % sensitivity analysis
+    dF = filterSensitivity(nelx, nely, x, dF, RaFil);           % apply sensitivity filter
+    xnew = OC(nelx, nely, element, x, FrVol, -dF, move, SF);    % get new densities
     change = max(max(abs(xnew-x)));
     x = xnew;               % update densities
     iter = iter + 1;
     %% display results
-    disp(['Iter: ' sprintf('%i', iter) ', Obj: ' sprintf('%.3f', C)...
+    disp(['Iter: ' sprintf('%i', iter) ', Obj: ' sprintf('%.3f', eigenF(optFindex))...
         ', Vol. frac.: ' sprintf('%.3f', sum(sum(x))/(nelx*nely))]);
-    Cs = cat(2, Cs, C);
+    eigenFs = cat(2, eigenFs, eigenF);
     changes = cat(2, changes, change);
-    plotConvergence(1:iter, Cs, 'c');
+    plotConvergence(1:iter, eigenFs, 'f');
     plotConvergence(1:iter, changes, 'x');
     plotDesign(x);
 end
 
-%% DISPLAY DEFORMED CONFIGURATION
-plotDeformed(nelx, nely, element, x.^CoPen, U);
+%% DISPLAY EIGENMODE
+plotDeformed(nelx, nely, element, x.^PenK, eigenM(:, optFindex));

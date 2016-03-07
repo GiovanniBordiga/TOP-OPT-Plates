@@ -1,24 +1,23 @@
-function U = FEM(nelx, nely, element, dims, material, x, CoPen)
+function U = FEM(problem, element, x, CoPen)
 % Solve the system KU=F.
-% 'nelx' and 'nely' are the number of element along the two dimensions.
-% 'element' is a string representing the finite element type.
-% 'dims' is a struct containing three attributes which specify the
-% element's dimensions: width, height, thickness.
-% 'material' is a struct containing two attribute: E (Young's modulus) and
-% v (Poisson's ratio).
+% 'problem' is a Problem object.
+% 'nelx' and 'nely' are the number of elements along the two dimensions.
+% 'element' is a FE object.
 % 'x' is a nely-by-nelx matrix representing the density field on the plate.
+% 'CoPen' is the penalization coefficient used in the SIMP model.
 % 'U' is the global dofs vector.
 
-% the order of the element's dof are like: [node_1_dof_1 ... node_1_dof_k ...... node_n_dof_1 ... node_n_dof_k],
-% where n is the number of nodes and k is the number of dofs per node.
+% The global numbering of the plate's dofs is ordered by columns.
 
-import FEM.*
-ndof = 3; % TODO to get from element?
-n = 4;    % TODO to get from element?
-F = sparse(ndof*(nely+1)*(nelx+1), 1);  
+nelx = problem.nelx;
+nely = problem.nely;
+n = element.nodes;     % nodes
+ndof = element.ndof;   % dofs per node
+Ke = element.K;
+DOFindex = problem.DOFindex;
+
 U = zeros(ndof*(nely+1)*(nelx+1), 1);
 
-[Kf, Ks] = getK(element, dims, material);
 % assemble K assuming the same size for all the elements
 % probably not so efficient (TEST!)
 % for elx = 1:nelx
@@ -36,32 +35,14 @@ U = zeros(ndof*(nely+1)*(nelx+1), 1);
 %     end
 % end
 
-% create global dof index
-DOFindex = [];
-for elx = 1:nelx
-    for ely = 1:nely
-        nodesnum = [(elx-1)*(nely+1) + ely + 1
-                    (elx)*(nely+1) + ely + 1
-                    (elx)*(nely+1) + ely
-                    (elx-1)*(nely+1) + ely];    % global nodes numbers of the current element
-        for i = 1:n
-            DOFindex = cat(2, DOFindex, (nodesnum(i)-1)*ndof+1:nodesnum(i)*ndof);
-        end
-    end
-end
 % assemble K assuming the same size for all the elements
 x = reshape(x, 1, nelx*nely);
 rowindex = kron(DOFindex, ones(1, ndof*n));
 colindex = reshape(kron(reshape(DOFindex, ndof*n, nelx*nely), ones(1, ndof*n)), 1, nelx*nely*(ndof*n)^2);
-K = sparse(rowindex, colindex, kron(x.^CoPen, reshape(Kf+Ks, 1, (ndof*n)^2)));
-
-% define loads and constraints - MODIFY AS YOU LIKE
-F(1:3:3*(nely+1)*(nelx+1),1) = 1;
-alldof = 1:ndof*(nelx+1)*(nely+1);
-fixeddof = 1:ndof*(nely+1); % one edge clamped
-freedof = setdiff(alldof, fixeddof);
-U(fixeddof) = 0;
+K = sparse(rowindex, colindex, kron(x.^CoPen, reshape(Ke, 1, (ndof*n)^2)));
 
 % solve the system
+freedof = problem.freedof;
+F = problem.F;
 U(freedof) = K(freedof, freedof) \ F(freedof);
 end
