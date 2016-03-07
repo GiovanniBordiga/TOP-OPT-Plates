@@ -1,7 +1,8 @@
 %% MAIN SCRIPT FOR EIGENFREQUENCY OPTIMIZATION
 % This code implements an optimization procedure to find, given a certain
 % amount of available material, the mass distribution of a plate which 
-% maximizes its foundamental (lowest) eigenfrequency.
+% maximizes the specified eigenfrequency.
+% The eigenfrequency to optimize can be set using the 'optFindex' variable.
 % Dimensions and material of the plate can be specified in the following
 % initialization section. Only rectangular plates are considered.
 % Three types of finite element are supported: two Kirchhoff elements
