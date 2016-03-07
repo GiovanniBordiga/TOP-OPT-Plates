@@ -16,6 +16,11 @@ The main functionalities implemented in the code are
 - Different types of finite element available (ACM, BMF, etc.)
 - Plots displaying *convergence*, *deformed configuration* and *eigenmodes*
 
+## How to start using the code
+Basically you just need to run one of the two main files ([main_compliance.m](main_compliance.m) or [main_eigenfrequncies.m](main_eigenfrequncies.m)) and see what happens :smile:.
+
+Obviously you can modify the code as you want. For example, if you'd like to change the problem to be solved, just set the `problemId` in the main file to match a value of the available cases defined in the [Problem](+FEM/Problem.m) class. And if you want to start to get your hands dirty with the code, you can create your own cases in this class, so that you can solve whatever problem you like :sunglasses:.
+
 ## Future development
 Possibly some of these areas may be explored and developed in the future
 - *Multiobjective Optimization* (for compliance problems)
