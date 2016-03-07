@@ -1,4 +1,4 @@
-function dF = getFSensitivity(nelx, nely, element, x, PenK, PenM, eigenF, eigenM)
+function dF = getFSensitivity(nelx, nely, element, x, PenK, PenM, eigenF, eigenM, optFindex)
 % Return the sensitivity of the lowest eigenfrequency with respect to densities.
 % 'nelx' and 'nely' are the number of elements along the two dimensions.
 % 'element' is a FE object.
@@ -8,15 +8,15 @@ function dF = getFSensitivity(nelx, nely, element, x, PenK, PenM, eigenF, eigenM
 % of an element (assuming that is the same for every element).
 % 'eigenF' is the vector of the eigenvalues.
 % 'eigenM' is the matrix of the eigenvectors (stored as columns).
+% 'optFindex' is the eigenvalue's index to optimize.
 
 n = element.nodes;     % nodes
 ndof = element.ndof;   % dofs per node
 Ke = element.K;
 Me = element.M;
 dF = zeros(nely, nelx);
-lowF = min(eigenF);         % get the lowest eigenfrequency
-lowM = eigenM(:, eigenF==lowF);      % get the corresponding eigenmode
-% PenM = x; PenM(PenM<0.1) = 6; PenM(PenM~=6) = 3;
+F = eigenF(optFindex);         % get the lowest eigenfrequency 
+Mode = eigenM(:, optFindex);      % get the corresponding eigenmode
 for elx = 1:nelx
     for ely = 1:nely
         eDOFindex = [];     % global dofs index of the current element, needed to access the element's dofs from 'lowM'
@@ -27,10 +27,10 @@ for elx = 1:nelx
         for i = 1:n
             eDOFindex = cat(2, eDOFindex, (nodesnum(i)-1)*ndof+1:nodesnum(i)*ndof);
         end
-        lowMe = lowM(eDOFindex);      % dofs of the current element
+        Modee = Mode(eDOFindex);      % dofs of the current element
         dKe = PenK*x(ely, elx)^(PenK-1)*Ke;
         dMe = PenM*x(ely, elx)^(PenM-1)*Me;
-        dF(ely, elx) = lowMe'*(dKe - lowF * dMe)*lowMe; % it should be divided by (lowM'*M*lowM), but (lowM'*M*lowM)=1
+        dF(ely, elx) = Modee'*(dKe - F * dMe)*Modee;
     end
 end
 end

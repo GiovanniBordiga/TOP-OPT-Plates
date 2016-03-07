@@ -1,4 +1,4 @@
-function U = FEM(problem, nelx, nely, element, x, CoPen)
+function U = FEM(problem, element, x, CoPen)
 % Solve the system KU=F.
 % 'problem' is a Problem object.
 % 'nelx' and 'nely' are the number of elements along the two dimensions.
@@ -9,9 +9,12 @@ function U = FEM(problem, nelx, nely, element, x, CoPen)
 
 % The global numbering of the plate's dofs is ordered by columns.
 
+nelx = problem.nelx;
+nely = problem.nely;
 n = element.nodes;     % nodes
 ndof = element.ndof;   % dofs per node
 Ke = element.K;
+DOFindex = problem.DOFindex;
 
 U = zeros(ndof*(nely+1)*(nelx+1), 1);
 
@@ -32,19 +35,6 @@ U = zeros(ndof*(nely+1)*(nelx+1), 1);
 %     end
 % end
 
-% create global dof index
-DOFindex = [];
-for elx = 1:nelx
-    for ely = 1:nely
-        nodesnum = [(elx-1)*(nely+1) + ely + 1
-                    (elx)*(nely+1) + ely + 1
-                    (elx)*(nely+1) + ely
-                    (elx-1)*(nely+1) + ely];    % global nodes numbers of the current element
-        for i = 1:n
-            DOFindex = cat(2, DOFindex, (nodesnum(i)-1)*ndof+1:nodesnum(i)*ndof);
-        end
-    end
-end
 % assemble K assuming the same size for all the elements
 x = reshape(x, 1, nelx*nely);
 rowindex = kron(DOFindex, ones(1, ndof*n));

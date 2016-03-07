@@ -1,17 +1,35 @@
+%% MAIN SCRIPT FOR COMPLIANCE OPTIMIZATION
+% This code implements an optimization procedure to find, given a certain
+% amount of available material, the mass distribution of a plate which 
+% minimizes its compliance (work of loads).
+% Dimensions and material of the plate can be specified in the following
+% initialization section. Only rectangular plates are considered.
+% Three types of finite element are supported: two Kirchhoff elements
+% (ACM and BMF) and one Mindlin element (here called MB4). To use the
+% desired finite element just plug the corresponding string in the
+% initialization of the 'FE' object.
+% Boundary conditions (constraints and loads) are specified in the
+% 'Problem' class and initialized through its object 'problem' passing the
+% appropriate string ('problemId') to the constructor. For a full list of
+% available problems, see the 'Problem' class in the 'FEM' package.
+% To set the volume constraint of the optimization problem, use the volume
+% fraction variable 'FrVol'.
+%%
+
 import FEM.*
 import opt.*
 import plot.*
 
 %% INITIALIZE GEOMETRY, MATERIAL, DESIGN VARIABLE
-nelx = 100; nely = 50;      % number of plate elements 
+nelx = 100; nely = 100;      % number of plate elements along the two axes
 dims.width = 1; dims.height = 1; dims.thickness = 1;    % element's dimensions
 material.E = 1000; material.v = 0.3; material.rho = 1;  % material properties
-element = FE('ACM', dims, material);                    % build the finite element
+element = FE('MB4', dims, material);                    % build the finite element
 FrVol = 0.3;                % volume fraction at the optimum condition
 x = ones(nely, nelx)*FrVol; % set uniform intial density
 
 %% PROBLEM SELECTION
-problem = Problem(nelx, nely, element, 'a'); % list of problems in "FEM/Problem"
+problem = Problem(nelx, nely, element, 'e'); % list of problems in "FEM/Problem"
 
 %% INITIALIZE NUMERICAL VARIABLES
 CoPen = 3;                  % penalization coefficient used in the SIMP model
@@ -28,9 +46,9 @@ maxiter = 15;                % maximum number of iterations (convergence)
 iter = 0;                   % iteration counter
 while change > tol && iter < maxiter
     %% optimize
-    U = FEM(problem, nelx, nely, element, x, CoPen); % solve FEM
-    [dC, C] = getCSensitivity(nelx, nely, element, x, CoPen, U);  % sensitivity analysis
-    dC = filterSensitivity(nelx, nely, x, dC, RaFil);       % apply sensitivity filter
+    U = FEM(problem, element, x, CoPen);                            % solve FEM
+    [dC, C] = getCSensitivity(nelx, nely, element, x, CoPen, U);    % sensitivity analysis
+    dC = filterSensitivity(nelx, nely, x, dC, RaFil);               % apply sensitivity filter
     xnew = PG(nelx, nely, x, FrVol, dC, move, stepsize);    % get new densities
     change = max(max(abs(xnew-x)));
     x = xnew;               % update densities
