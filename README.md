@@ -37,4 +37,4 @@ Here's a brief list of the main papers used to explore the field.
 - Zhen-Gong Ma, Noboru Kikuchi, Hsien-Chie Cheng (1994) - *Topological design for vibrating structures*
 - Jianbin Du, Niels Olhoff (2005) - *Topological design of freely vibrating continuum structures for maximum values of simple and multiple eigenfrequencies and frequency gaps*
 - Erik Lund, Niels Olhoff (1994) - *Multiple eigenvalues in structural optimization problems*
-- Krister Svanberg (1987) - *The method of moving asymptotes*
+- Krister Svanberg (1987) - *The Method of Moving Asymptotes*
