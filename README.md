@@ -20,7 +20,7 @@ The main functionalities implemented in the code are
 - *Compliance Optimization* (work of loads minimization)
 - *Eigenfrequencies Optimization*
 - Different types of finite element available (ACM, BMF, etc.)
-- Plots displaying *convergence*, *deformed configuration* and *eigenmodes*
+- Plots displaying *convergence*, *optimal design*, *deformed configuration* and *eigenmodes*
 
 ## How to start using the code
 Basically you just need to run one of the two main files ([main_compliance.m](main_compliance.m) or [main_eigenfrequncies.m](main_eigenfrequncies.m)) and see what happens :smile:.
