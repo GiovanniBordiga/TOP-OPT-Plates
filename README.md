@@ -1,8 +1,8 @@
 # TOP-OPT-Plates
 MATLAB Code for Topology Optimization of Plates
 
-![Deformed](example-deformed.png)
-![Design](example-design.png)
+<img align="center" src="example-deformed.png" alt="Deformed configuration">
+<img align="center" src="example-design.png" alt="Optimal design">
 
 ## Overview
 This is a project developed by a small group of students of the Civil Engineering Master Degree at the [*University of Trento (Italy)*](http://www.dicam.unitn.it/) for the *Computational Mechanics of Structures 2* course.
