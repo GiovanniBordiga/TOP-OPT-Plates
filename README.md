@@ -1,4 +1,4 @@
-# TOP-OPT-Plates [![MATLAB](https://img.shields.io/badge/Developed%20with-MATLAB-blue)](https://www.mathworks.com/products/matlab.html)
+# TOP-OPT-Plates [![MATLAB](https://img.shields.io/badge/Made%20with-MATLAB-0076A8?logo=mathworks&&labelColor=34495e)](https://www.mathworks.com/products/matlab.html)
 
 MATLAB Code for Topology Optimization of Plates
 
